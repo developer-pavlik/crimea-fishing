@@ -5,7 +5,7 @@ import SearchIcon from '../../../../public/icons/search.svg';
 
 const SearchInput = () => (
     <div className={styles.searchField}>
-        <TextInput placeholder='Поиск товара' />
+        <TextInput name='search' className={styles.searchInput} placeholder='Поиск товара' />
         <Button className={styles.searchButton} type='submit'>
             <SearchIcon className={styles.searchIcon} />
         </Button>

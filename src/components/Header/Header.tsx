@@ -20,7 +20,6 @@ const Header = () => (
                 <SearchInput />
                 <Link className={styles.personalAccount} href="/">
                     <UserIcon className={styles.userIcon} />
-                    <span>Кабинет</span>
                 </Link>
             </div>
         </div>

@@ -28,14 +28,10 @@
 
     &_size-s {
         height: 44px;
-    }
-
-    &_size-m {
-        height: 65px;
-        border-radius: 24px;
-        font-size: 18px;
-        font-weight: 400;
-        padding: 0 24px;
+        border-radius: 8px;
+        padding: 0 16px;
+        font-size: 16px;
+        font-weight: 500;
     }
     
     &_error {

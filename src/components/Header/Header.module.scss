@@ -1,16 +1,16 @@
 .inner {
-    min-height: 100px;
+    min-height: 80px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 48px;
+    gap: 24px;
     background: #fff;
     border-radius: 0 0 24px 24px;
-    padding: 12px 24px;
+    padding: 8px 24px;
 }
 
 .logoImg {
-    width: 70px;
+    width: 64px;
     height: auto;
 }
 
@@ -18,7 +18,13 @@
     display: flex;
 }
 
+.personalAccount {
+    display: flex;
+    align-items: center;
+}
+
 .userIcon {
-    width: 60px;
-    height: 60px;
+    width: 54px;
+    height: 54px;
+    color: #31a5d9;
 }
