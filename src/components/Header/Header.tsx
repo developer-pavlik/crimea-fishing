@@ -1,8 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../../public/logo.png';
+import userIcon from '../../../public/icons/user.svg';
 import styles from './Header.module.scss'
-import TextInput from '../ui/TextInput/TextInput';
+import SearchInput from '../ui/SearchInput/SearchInput';
 
 const Header = () => (
     <header className={styles.header}>
@@ -16,7 +17,16 @@ const Header = () => (
                     priority
                     />
                 </Link>
-                <TextInput  placeholder="Поиск..." />
+                <SearchInput />
+                <Link className={styles.personalAccount} href="/">
+                    <Image
+                    src={userIcon}
+                    alt="Личный кабинет"
+                    className={styles.userIcon}
+                    priority
+                    />
+                    <span>Кабинет</span>
+                </Link>
             </div>
         </div>
     </header>
