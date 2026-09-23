@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../../public/logo.png';
 import styles from './Header.module.scss'
+import TextInput from '../ui/TextInput/TextInput';
 
 const Header = () => (
     <header className={styles.header}>
@@ -15,7 +16,7 @@ const Header = () => (
                     priority
                     />
                 </Link>
-                тест
+                <TextInput  placeholder="Поиск..." />
             </div>
         </div>
     </header>
