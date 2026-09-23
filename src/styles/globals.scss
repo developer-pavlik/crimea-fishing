@@ -1,0 +1,29 @@
+html {
+  scrollbar-gutter: stable;
+
+  @media (prefers-reduced-motion: no-preference) {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+  background-color: #F5F7FA;
+}
+
+.main {
+  flex-grow: 1;
+}
+
+.container {
+  max-width: 1416px;
+  margin: auto;
+  padding: 0 16px;
+
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+}

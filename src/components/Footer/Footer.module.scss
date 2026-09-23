@@ -1,0 +1,30 @@
+.inner {
+    min-height: 107px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 48px;
+
+    @media (max-width: 1000px) {
+        gap: 16px 26px;
+        min-height: 84px;
+       
+    }
+
+    @media (max-width: 764px) {
+        flex-wrap: wrap;
+        padding: 16px 0;
+    }
+}
+
+.authButtons {
+    display: flex;
+    gap: 16px;
+    flex-grow: 1;
+    justify-content: center;
+
+    @media (max-width: 764px) {
+        width: calc(100% - 100px);
+        justify-content: flex-start;
+    }
+}
