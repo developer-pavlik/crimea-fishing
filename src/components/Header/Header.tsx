@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from '../../../public/logo.png';
-import userIcon from '../../../public/icons/user.svg';
+import UserIcon from '../../../public/icons/user.svg';
 import styles from './Header.module.scss'
 import SearchInput from '../ui/SearchInput/SearchInput';
 
@@ -19,12 +19,7 @@ const Header = () => (
                 </Link>
                 <SearchInput />
                 <Link className={styles.personalAccount} href="/">
-                    <Image
-                    src={userIcon}
-                    alt="Личный кабинет"
-                    className={styles.userIcon}
-                    priority
-                    />
+                    <UserIcon className={styles.userIcon} />
                     <span>Кабинет</span>
                 </Link>
             </div>
