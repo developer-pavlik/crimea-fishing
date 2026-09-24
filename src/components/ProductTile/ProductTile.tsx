@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Pagination } from 'swiper/modules';
+import { Pagination, Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import Link from "next/link";
@@ -25,14 +25,27 @@ const ProductTile = ({
     href,
     className,
 }: ProductTileProps) => {
+
+    const handleNavClick = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Navigation button clicked');
+    };
+
+
+
     return (
         <Link className={cn(styles.productTile, className)} href={href}>
             {imagesUrl[0] && (
                 <div className={styles.imageWrapper}>
                     <Swiper
                         className={styles.slider}                  
-                        modules={[Pagination]}
+                        modules={[Pagination, Navigation]}
                         pagination={{ clickable: false }}
+                        navigation={{
+                            nextEl: '.my-custom-next',
+                            prevEl: '.my-custom-prev',
+                        }}
                         slidesPerView={1}
                         onSlideChange={() => console.log('slide change')}
                         onSwiper={(swiper) => console.log(swiper)}
@@ -42,6 +55,12 @@ const ProductTile = ({
                         <SwiperSlide>Slide 3</SwiperSlide>
                         <SwiperSlide>Slide 4</SwiperSlide>
                     </Swiper>
+                    <button className={cn('my-custom-prev', styles.sliderButtonPrev)} onClick={handleNavClick}>
+                        Назад
+                    </button>
+                    <button className={cn('my-custom-next', styles.sliderButtonNext)} onClick={handleNavClick}>
+                        Вперед
+                    </button>
                 </div>
             )}
             <div className={styles.content}>

@@ -19,9 +19,7 @@
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #eef2f5;
-    padding: 4px 4px 0;
-
-
+    padding: 4px 4px 0;    
 }
 
 .image {
@@ -60,4 +58,26 @@
 
     --swiper-pagination-bullet-horizontal-gap: 2px;
     --swiper-pagination-bullet-size: 4px;
+}
+
+.sliderButtonPrev,
+.sliderButtonNext {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.sliderButtonPrev {
+    left: 10px;
+}
+
+.sliderButtonNext {
+    right: 10px;
 }
