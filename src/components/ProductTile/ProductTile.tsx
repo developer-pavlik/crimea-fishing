@@ -1,14 +1,20 @@
 "use client";
 
-import Image from "next/image";
-import { Pagination, Navigation } from 'swiper/modules';
+import Image from 'next/image';
+import type { Swiper as SwiperInstance } from 'swiper';
+import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import { useRef } from 'react';
 
 import Link from "next/link";
 import cn from "clsx";
 import styles from "./ProductTile.module.scss";
 import 'swiper/css';
 import 'swiper/css/pagination';
+
+
+import PrevIcon from '../../../public/icons/prev.svg';
+import NextIcon from '../../../public/icons/next.svg';
 
 export interface ProductTileProps {
     title: string;
@@ -26,13 +32,18 @@ const ProductTile = ({
     className,
 }: ProductTileProps) => {
 
-    const handleNavClick = (e) => {
+    const swiperRef = useRef<SwiperInstance | null>(null);
+
+    const handleNavClick = (e: React.MouseEvent<HTMLButtonElement>, direction: 'prev' | 'next') => {
         e.preventDefault();
         e.stopPropagation();
-        console.log('Navigation button clicked');
+
+        if (direction === 'prev') {
+            swiperRef.current?.slidePrev();
+        } else {
+            swiperRef.current?.slideNext();
+        }
     };
-
-
 
     return (
         <Link className={cn(styles.productTile, className)} href={href}>
@@ -40,26 +51,32 @@ const ProductTile = ({
                 <div className={styles.imageWrapper}>
                     <Swiper
                         className={styles.slider}                  
-                        modules={[Pagination, Navigation]}
+                        modules={[Pagination]}
                         pagination={{ clickable: false }}
-                        navigation={{
-                            nextEl: '.my-custom-next',
-                            prevEl: '.my-custom-prev',
-                        }}
                         slidesPerView={1}
-                        onSlideChange={() => console.log('slide change')}
-                        onSwiper={(swiper) => console.log(swiper)}
+                        loop={true}
+                        onSwiper={(swiper) => {
+                            swiperRef.current = swiper;
+                        }}
                         >
-                        <SwiperSlide>Slide 1</SwiperSlide>
-                        <SwiperSlide>Slide 2</SwiperSlide>
-                        <SwiperSlide>Slide 3</SwiperSlide>
-                        <SwiperSlide>Slide 4</SwiperSlide>
+                        {
+                            imagesUrl.map((imageUrl, index) => (
+                                <SwiperSlide key={index}>
+                                    <Image
+                                        src={imageUrl}
+                                        alt={title}
+                                        className={styles.image}
+                                        fill
+                                    />
+                                </SwiperSlide>
+                            ))
+                        }
                     </Swiper>
-                    <button className={cn('my-custom-prev', styles.sliderButtonPrev)} onClick={handleNavClick}>
-                        Назад
+                    <button className={styles.sliderButtonPrev} onClick={(event) => handleNavClick(event, 'prev')}>
+                        <PrevIcon  className={styles.sliderButtonIcon}/>
                     </button>
-                    <button className={cn('my-custom-next', styles.sliderButtonNext)} onClick={handleNavClick}>
-                        Вперед
+                    <button className={styles.sliderButtonNext} onClick={(event) => handleNavClick(event, 'next')}>
+                        <NextIcon className={styles.sliderButtonIcon}/>
                     </button>
                 </div>
             )}

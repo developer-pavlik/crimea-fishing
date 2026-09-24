@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [
+      new URL('https://ir.ozone.ru/**'),
+    ],
+  },
 };
 
 export default nextConfig;
