@@ -20,6 +20,8 @@
     overflow: hidden;
     background: #eef2f5;
     padding: 4px 4px 0;
+
+
 }
 
 .image {
@@ -51,4 +53,11 @@
     font-weight: 700;
     color: #1281b9;
     margin-top: auto;
+}
+
+.slider {
+    height: 100%;
+
+    --swiper-pagination-bullet-horizontal-gap: 2px;
+    --swiper-pagination-bullet-size: 4px;
 }
