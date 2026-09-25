@@ -18,3 +18,24 @@
 .image  {
     object-fit: contain;
 }
+
+.thumbs {
+    margin-top: 12px;
+}
+
+.thumb {
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.thumb:global(.swiper-slide-thumb-active) {
+    opacity: 1;
+}
+
+.thumbImage {
+    object-fit: cover;
+}
