@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './Product.module.scss'
 import { Button } from '@/components/ui/Button/Button'
 import Link from 'next/link'
-import cn from "clsx";
+import ProductSlider from '@/components/ProductSlider/ProductSlider'
 
 
 
@@ -20,12 +20,13 @@ export interface ProductProps {
     };
 }
 
-const Product: React.FC<ProductProps> = ({ title, price, description, specifications, author }) => {
+const Product: React.FC<ProductProps> = ({ title, price, description, specifications, author, imagesUrl }) => {
     return (
         <div className={styles.product}>
             <div className={styles.content}>
                 <div className={styles.main}>
                     <h1 className={styles.title}>{title}</h1>
+                    {imagesUrl && <ProductSlider imagesUrl={imagesUrl} />}
                     <div className={styles.description}>{description}</div>
                     {specifications && (
                         <div className={styles.specifications}>

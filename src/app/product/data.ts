@@ -4,9 +4,12 @@ export const productData: ProductProps = {
     title: "Плавник с электромотором Aqua Marina Bluedrive K",
     price: 1000,
     imagesUrl: [
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=80",
+        "https://ir.ozone.ru/s3/multimedia-1-w/wc2500/7827556172.jpg",
+        "https://ir.ozone.ru/s3/multimedia-1-v/wc2500/7598981299.jpg",
+        "https://ir.ozone.ru/s3/multimedia-1-w/wc2500/7598981480.jpg",
+        "https://ir.ozone.ru/s3/multimedia-1-b/wc2500/7598981423.jpg",
+        "https://ir.ozone.ru/s3/multimedia-1-m/wc2500/7598981290.jpg",
+        "https://ir.ozone.ru/s3/multimedia-1-t/wc2500/7598981405.jpg",
     ],
     description:
         "Надежный электромотор Aqua Marina Bluedrive K для комфортной рыбалки и спокойного перемещения по воде. Компактная конструкция, высокая мощность и удобное управление делают модель отличным выбором для любителей активного отдыха на воде.",

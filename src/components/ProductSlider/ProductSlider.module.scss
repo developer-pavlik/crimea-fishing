@@ -1,0 +1,20 @@
+.productSlider {
+   position: relative;
+  
+}
+
+.slider {
+    height: 100%;
+}
+
+.productSliderInner {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #fff;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.image  {
+    object-fit: contain;
+}
