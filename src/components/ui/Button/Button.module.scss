@@ -5,16 +5,16 @@
     cursor: pointer;
 
     &_primary {
-        background: #31A5D9;
+        background: var(--primary-btn-color);
         color: #FFFFFF;
         font-weight: 500;
 
         &:hover {
-            background: #2391C2;
+            background: var(--primary-btn-hover-color);
         }
 
         &:active {
-            background: #1D779F;
+            background: var(--primary-btn-active-color);
         }
     }
 

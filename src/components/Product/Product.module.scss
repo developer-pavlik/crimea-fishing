@@ -1,0 +1,73 @@
+.content {
+    display: grid;
+    grid-template-columns: 1fr 250px;
+    gap: 24px;
+    color: var(--main-text-color);
+}
+
+.specifications {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.specificationItem {
+    display: flex;
+    gap: 4px;
+}
+
+.price {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--price-color);
+}
+
+.buyButton {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.description,
+.specifications {
+    font-size: 16px;
+}
+
+.specificationName {
+    font-weight: 500;
+}
+
+.sellerBox {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-direction: column;
+}
+
+.seller {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--main-text-color);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.sellerAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ccc;
+}
+
+.sellerLabel {
+    font-weight: 500;
+    color: #6b6363;
+    font-size: 14px
+}
