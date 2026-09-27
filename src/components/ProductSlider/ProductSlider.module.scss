@@ -13,6 +13,7 @@
     background: #fff;
     border-radius: 24px;
     overflow: hidden;
+    position: relative;
 }
 
 .image  {
@@ -38,4 +39,44 @@
 
 .thumbImage {
     object-fit: cover;
+}
+
+.sliderButtonPrev,
+.sliderButtonNext {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: var(--primary-btn-color);
+    cursor: pointer;
+    z-index: 1;
+
+    &:hover {
+        background: var(--primary-btn-hover-color);
+    }
+
+    &:active {
+        background: var(--primary-btn-active-color);
+    }
+
+}
+
+.sliderButtonPrev {
+    left: 24px;
+}
+
+.sliderButtonNext {
+    right: 24px;
+}
+
+.sliderButtonIcon {
+    width: 100%;
+    height: 100%;
+    color: #fff;
 }
