@@ -7,9 +7,9 @@ import { usePathname } from 'next/navigation';
 
 const links = [
     { title: 'Все товары', href: '/' },
-    { title: 'Б/У', href: '/used' },
-    { title: 'Новое', href: '/new' },
-    { title: 'Халява', href: '/free' },
+    { title: 'Б/У', href: '/products/used' },
+    { title: 'Новое', href: '/products/new' },
+    { title: 'Халява', href: '/products/free' },
 ];
 
 const ProductPanel = () => {
