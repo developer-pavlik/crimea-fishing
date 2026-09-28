@@ -1,0 +1,41 @@
+.textareaField {
+    position: relative;
+}
+
+.textarea {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 16px;
+
+    border: 1px solid rgba(35, 38, 43, 0.2);
+    color: #23262B;
+    resize: none;
+
+    &:focus-visible {
+        outline: 1px solid #0073FF;
+        box-shadow: 0 0 4px 0 rgba(0, 115, 255, 0.5);
+    }
+
+    &:disabled {
+        border: 1px solid rgba(35, 38, 43, 0.2);
+        background: rgba(35, 38, 43, 0.08);
+        color: rgba(35, 38, 43, 0.2);
+
+        &::placeholder {
+            color: rgba(35, 38, 43, 0.2);
+        }
+    }
+
+    &::placeholder {
+        color: rgba(35, 38, 43, 0.6);
+    }
+
+    &_error {
+        border: 1px solid #FF4D4D;
+    }
+}
