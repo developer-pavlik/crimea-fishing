@@ -34,7 +34,7 @@ const ProductPanel = () => {
                 })}
             </div>
             <div className={styles.partTwo}>
-                <Link className={styles.addProuctLink} href='/add-product'>
+                <Link className={styles.addProuctLink} href='/products/add'>
                     <PlusIcon className={styles.plusIcon}  />
                     <span>Добавить товар</span>
                 </Link>
