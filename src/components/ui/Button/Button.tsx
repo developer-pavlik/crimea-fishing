@@ -6,7 +6,7 @@ import styles from "./Button.module.scss";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     size?: "s" | "m" | "l";
-    view?: "primary" | "secondary";
+    view?: "primary" | "secondary" | 'negative';
     isLoading?: boolean;
     isDisabled?: boolean;
 }

@@ -5,6 +5,7 @@ import styles from './ProductForm.module.scss'
 import TextInput from '../ui/TextInput/TextInput';
 import Textarea from '../ui/Textarea/Textarea';
 import { Button } from '../ui/Button/Button';
+import ImgLoader from '../ImgLoader/ImgLoader';
 
 import DeleteIcon from '../../../public/icons/delete.svg';
 
@@ -36,6 +37,7 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
             <h2 className={styles.title}>{initialData ? 'Редактирование товара' : 'Добавление товара'}</h2>
         </div>
         <form onSubmit={handleSubmit} className={styles.productForm}>
+            <ImgLoader />
             <div className={styles.productFormField}>
                 <TextInput name='title' className={styles.input} placeholder='Заголовок товара' />
             </div>

@@ -1,0 +1,130 @@
+.imgLoader {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    background: #fff;
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid #ccc;
+    gap: 12px
+}
+
+.items {
+    flex-grow: 1;
+}
+
+.title {
+    color: var(--main-text-color);
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.panel {
+    display: flex;
+    gap: 16px;
+}
+
+.items {
+    display: flex;
+    min-height: 300px;
+}
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    background: #f5f5f5;
+    align-self: start;
+    padding: 8px 12px 8px 8px;
+    width: 100%;
+    border-radius: 12px;
+    align-items: center;
+}
+
+.emptyView {
+    display: flex;
+    width: 70px;
+    height: auto;
+    color: #e7e7e7;
+    margin: auto;
+}
+
+.preview {
+    width: 60px;
+    aspect-ratio: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.previewImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.deleteButton {
+    border: 0;
+    background: transparent;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    padding: 0;
+    color: #686868;
+}
+
+.deleteIcon {
+    width: 100%;
+    height: 100%;
+}
+
+.imgStatus {
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    position: absolute;
+    width: 24px;
+    height:24px;
+    margin: auto;
+}
+
+.loader {
+    color: #31A5D9;
+    width: 100%;
+    height: 100%;
+    animation: loaderRotation 1s linear infinite;
+}
+
+.isLoaded {
+    background: #31A5D9;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    color: #fff;
+    box-sizing: border-box;
+    padding: 4px;
+}
+
+.isLoadedIcon {
+    width: 100%;
+    height: 100%;
+}
+
+.error {
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    background: #e56464;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@keyframes loaderRotation {
+    to {
+        transform: rotate(360deg);
+    }
+}

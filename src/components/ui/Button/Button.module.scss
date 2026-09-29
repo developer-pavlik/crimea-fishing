@@ -3,12 +3,12 @@
     border: none;
     line-height: 1;
     cursor: pointer;
+    font-weight: 500;
 
     &_primary {
         background: var(--primary-btn-color);
         color: #FFFFFF;
-        font-weight: 500;
-
+        
         &:hover {
             background: var(--primary-btn-hover-color);
         }
@@ -23,6 +23,19 @@
         color: rgba(35, 38, 43, 0.8);
         box-shadow: 0 0 1px 1px rgba(35, 38, 43, 0.2);
         font-weight: 400;
+    }
+
+    &_negative {
+        background: var(--negative-btn-color);
+        color: #FFFFFF;
+
+        &:hover {
+            background: var(--negative-btn-hover-color);
+        }
+
+        &:active {
+            background: var(--negative-btn-active-color);
+        }
     }
 
 
@@ -41,17 +54,6 @@
         border-radius: 24px;
         font-size: 16px;
         min-height: 44px;
-
-        @media (max-width: 1000px) {
-            padding: 0 16px;
-            font-size: 12px;   
-            min-height: 36px;  
-        }
-
-        @media (max-width: 393px) {  
-            min-height: 30px;  
-            font-size: 11px;
-        }
     }
 }
 
