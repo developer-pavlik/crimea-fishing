@@ -26,7 +26,9 @@
 
 .items {
     display: flex;
+    flex-direction: column;
     min-height: 300px;
+    gap: 4px 0;
 }
 
 .item {
@@ -38,6 +40,7 @@
     width: 100%;
     border-radius: 12px;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .emptyView {
@@ -119,6 +122,12 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.globalError {
+    color: #e56464;
     font-size: 14px;
     font-weight: 600;
 }
