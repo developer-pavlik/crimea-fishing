@@ -6,26 +6,33 @@ import LoaderIcon from '../../../public/icons/loader.svg';
 import OkIcon from '../../../public/icons/checkmark.svg';
 import Image from 'next/image';
 
-const ImgLoader = () => (
+interface ImgLoaderProps {
+    imagesUrl?: string[];
+}
+
+const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => (
     <div className={styles.imgLoader}>
         <div className={styles.title}>Изображения товара</div>
         <div className={styles.items}>
-            {/* <PhotoIcon className={styles.emptyView} /> */}
-            <div className={styles.item}>
-                <div className={styles.preview}>
-                    <Image className={styles.previewImg} src="https://ir.ozone.ru/s3/multimedia-1-j/wc2500/10706974903.jpg" fill alt="" />
-                    <div className={styles.imgStatus}>
-                        {/* <LoaderIcon className={styles.loader} /> */}
-                        {/* <div className={styles.isLoaded}>
-                            <OkIcon className={styles.isLoadedIcon}/>
-                        </div> */}
-                        <div className={styles.error}>!</div>
+            {imagesUrl.length === 0 ? (
+                <PhotoIcon className={styles.emptyView} />
+            ) : imagesUrl.map((imageUrl, index) => (
+                <div className={styles.item} key={`${imageUrl}-${index}`}>
+                    <div className={styles.preview}>
+                        <Image className={styles.previewImg} src={imageUrl} fill alt={`Изображение товара ${index + 1}`} />
+                        <div className={styles.imgStatus}>
+                            {/* <LoaderIcon className={styles.loader} /> */}
+                            <div className={styles.isLoaded}>
+                                <OkIcon className={styles.isLoadedIcon}/>
+                            </div>
+                            {/* <div className={styles.error}>!</div> */}
+                        </div>
                     </div>
+                    <button className={styles.deleteButton}>
+                        <DeleteIcon className={styles.deleteIcon} />
+                    </button>
                 </div>
-                <button className={styles.deleteButton}>
-                    <DeleteIcon className={styles.deleteIcon} />
-                </button>
-            </div>
+            ))}
         </div>
         <div className={styles.panel}>
             <Button view='negative' type="button">Удалить все</Button>
