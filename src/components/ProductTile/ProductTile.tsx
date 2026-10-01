@@ -4,7 +4,9 @@ import Image from 'next/image';
 import type { Swiper as SwiperInstance } from 'swiper';
 import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import ProductTileMenu from '../ProductTileMenu/ProductTileMenu';
+import ProductTileFavoritesButton from '../ProductTileFavoritesButton/ProductTileFavoritesButton';
 
 import Link from "next/link";
 import cn from "clsx";
@@ -17,6 +19,8 @@ import PrevIcon from '../../../public/icons/prev.svg';
 import NextIcon from '../../../public/icons/next.svg';
 
 export interface ProductTileProps {
+    id: string;
+    isFavorite: boolean;
     title: string;
     price: number;
     imagesUrl: string[];
@@ -25,6 +29,7 @@ export interface ProductTileProps {
 }
 
 const ProductTile = ({
+    isFavorite,
     title,
     price,
     imagesUrl,
@@ -33,6 +38,7 @@ const ProductTile = ({
 }: ProductTileProps) => {
 
     const swiperRef = useRef<SwiperInstance | null>(null);
+    const [favorite, setFavorite] = useState(isFavorite);
 
     const handleNavClick = (e: React.MouseEvent<HTMLButtonElement>, direction: 'prev' | 'next') => {
         e.preventDefault();
@@ -46,45 +52,52 @@ const ProductTile = ({
     };
 
     return (
-        <Link className={cn(styles.productTile, className)} href={href}>
-            {imagesUrl[0] && (
-                <div className={styles.imageWrapper}>
-                    <Swiper
-                        className={styles.slider}                  
-                        modules={[Pagination]}
-                        pagination={{ clickable: false }}
-                        slidesPerView={1}
-                        loop={true}
-                        onSwiper={(swiper) => {
-                            swiperRef.current = swiper;
-                        }}
-                        >
-                        {
-                            imagesUrl.map((imageUrl, index) => (
-                                <SwiperSlide key={index}>
-                                    <Image
-                                        src={imageUrl}
-                                        alt={title}
-                                        className={styles.image}
-                                        fill
-                                    />
-                                </SwiperSlide>
-                            ))
-                        }
-                    </Swiper>
-                    <button className={styles.sliderButtonPrev} onClick={(event) => handleNavClick(event, 'prev')}>
-                        <PrevIcon  className={styles.sliderButtonIcon}/>
-                    </button>
-                    <button className={styles.sliderButtonNext} onClick={(event) => handleNavClick(event, 'next')}>
-                        <NextIcon className={styles.sliderButtonIcon}/>
-                    </button>
+        <div className={styles.productTileWrapper}>
+            <Link className={cn(styles.productTile, className)} href={href}>
+                {imagesUrl[0] && (
+                    <div className={styles.imageWrapper}>
+                        <Swiper
+                            className={styles.slider}                  
+                            modules={[Pagination]}
+                            pagination={{ clickable: false }}
+                            slidesPerView={1}
+                            loop={true}
+                            onSwiper={(swiper) => {
+                                swiperRef.current = swiper;
+                            }}
+                            >
+                            {
+                                imagesUrl.map((imageUrl, index) => (
+                                    <SwiperSlide key={index}>
+                                        <Image
+                                            src={imageUrl}
+                                            alt={title}
+                                            className={styles.image}
+                                            fill
+                                        />
+                                    </SwiperSlide>
+                                ))
+                            }
+                        </Swiper>
+                        <button className={styles.sliderButtonPrev} onClick={(event) => handleNavClick(event, 'prev')}>
+                            <PrevIcon  className={styles.sliderButtonIcon}/>
+                        </button>
+                        <button className={styles.sliderButtonNext} onClick={(event) => handleNavClick(event, 'next')}>
+                            <NextIcon className={styles.sliderButtonIcon}/>
+                        </button>
+                    </div>
+                )}
+                <div className={styles.content}>
+                    <h3 className={styles.title}>{title}</h3>
+                    <span className={styles.price}>{price} ₽</span>
                 </div>
-            )}
-            <div className={styles.content}>
-                <h3 className={styles.title}>{title}</h3>
-                <span className={styles.price}>{price} ₽</span>
-            </div>
-        </Link>
+            </Link>
+            <ProductTileMenu />
+            <ProductTileFavoritesButton
+                isFavorite={favorite}
+                onFavoriteChange={setFavorite}
+            />
+        </div>
     );
 };
 

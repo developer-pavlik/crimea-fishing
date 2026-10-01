@@ -1,0 +1,53 @@
+.menuButton {
+    position: absolute;
+    bottom: 12px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    color: var(--main-text-color);
+}
+
+.menuIcon {
+    width: 100%;
+    height: 100%;
+}
+
+.menu {
+    position: relative;
+    z-index: 50;
+    display: flex;
+    gap: 4px;
+    max-height: 200px;
+    min-width: 120px;
+    flex-direction: column;
+    overflow: auto;
+    overscroll-behavior: contain;
+    border-radius: 8px;
+    background: #fff;
+    padding: 4px ;
+    color: var(--main-text-color);
+    box-shadow: 0 0 8px #d1d1d1;
+    outline: none;
+}
+
+.menuItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    
+    &:hover {
+        background-color: #f0f0f0;
+    }
+}

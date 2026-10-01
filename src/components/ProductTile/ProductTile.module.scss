@@ -1,8 +1,13 @@
+.productTileWrapper {
+    overflow: hidden;
+    min-width: 0;
+    position: relative;
+}
+
 .productTile {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    min-width: 0;
-    overflow: hidden;
     color: #23262b;
     text-decoration: none;
     background: #ffffff;
