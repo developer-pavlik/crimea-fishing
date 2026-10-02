@@ -1,0 +1,15 @@
+.lp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.ltitle {
+    color: var(--main-text-color);
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+}
