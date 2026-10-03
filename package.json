@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "start http://localhost:3000 && next dev",
+    "devs": "start https://fishing-market-riba.com/ && next dev --experimental-https --hostname fishing-market-riba.com --port 443",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
