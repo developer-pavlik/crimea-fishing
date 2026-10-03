@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["cf.com"],
+  allowedDevOrigins: ["fishing-market-riba.com"],
   turbopack: {
     rules: {
       "*.svg": {
