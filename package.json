@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "start http://localhost:3000 && next dev",
-    "devs": "start https://fishing-market-riba.com/ && next dev --experimental-https --hostname fishing-market-riba.com --port 443",
+    "dev": "start http://localhost:3000 && node --import ./scripts/dev-proxy.mjs ./node_modules/next/dist/bin/next dev",
+    "devs": "start https://fishing-market-riba.com/ && node --import ./scripts/dev-proxy.mjs ./node_modules/next/dist/bin/next dev --experimental-https --hostname fishing-market-riba.com --port 443",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
@@ -14,6 +14,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^18.0.5",
     "drizzle-orm": "^1.0.0-rc.4",
+    "jose": "^6.2.12",
     "next": "16.3.5",
     "pg": "^8.23.1",
     "react": "19.2.8",
@@ -31,6 +32,7 @@
     "eslint-config-next": "16.3.5",
     "sass": "^1.104.1",
     "tsx": "^4.23.15",
-    "typescript": "^5"
+    "typescript": "^5",
+    "undici": "^6.29.0"
   }
 }

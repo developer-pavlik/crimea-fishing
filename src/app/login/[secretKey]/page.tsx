@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import styles from "./page.module.scss";
-import Script from 'next/script';
+import TelegramAuthButton from '@/components/TelegramAuthButton/TelegramAuthButton';
 
 interface Props {
     params: Promise<{ secretKey: string }>;
@@ -16,8 +16,7 @@ export default async function LoginPage({ params }: Props) {
     return (
         <main className={styles.lp}>
             <div className={styles.ltitle}>Для входа в систему используйте кнопку ниже</div>
-            <Script async src="https://oauth.telegram.org/js/telegram-login.js?6" data-client-id="8910582200" data-onauth="console.log(data)" data-request-access="write"></Script>
-            <button className="tg-auth-button">Войти через Telegram</button>
+            <TelegramAuthButton />
         </main>
     );
 }
