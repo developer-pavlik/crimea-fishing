@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Script from 'next/script';
 import { handleTelegramAuth } from '@/actions/auth';
-import { makeTestRequest } from '@/actions/testRequest';
 
 const clientId = process.env.NEXT_PUBLIC_CLIENT_ID_TELEGRAM;
 
@@ -22,9 +21,27 @@ type TelegramAuthResult =
     | { error: string };
 
 export default function TelegramAuthButton() {
+    const [error, setError] = useState('');
+
     useEffect(() => {
         window.onTelegramAuth = async (data) => {
-            await handleTelegramAuth(data);
+            if ('error' in data) {
+                setError('Не удалось войти через Telegram');
+                return;
+            }
+
+            setError('');
+
+            try {
+                const result = await handleTelegramAuth({ id_token: data.id_token });
+
+                if (!result.success) {
+                    setError(result.error);
+                    return;
+                }
+            } catch {
+                setError('Не удалось завершить вход. Попробуйте позже.');
+            }
         };
 
         return () => {
@@ -42,7 +59,7 @@ export default function TelegramAuthButton() {
                 data-request-access="write"
             />
             <button className="tg-auth-button">Войти через Telegram</button>
-            <button onClick={() => makeTestRequest()}>Тестовая кнопка</button>
+            {error && <p role="alert">{error}</p>}
         </>
     );
 }

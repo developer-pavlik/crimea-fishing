@@ -27,7 +27,10 @@ export const users = pgTable(
     role: userRole("role").default("user").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
   },
-  (table) => [unique("users_username_key").on(table.username)],
+  (table) => [
+    unique("users_username_key").on(table.username),
+    unique("users_telegram_id_key").on(table.telegramId),
+  ],
 );
 
 export const sessions = pgTable(
@@ -35,7 +38,7 @@ export const sessions = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey().notNull(),
     userId: uuid("user_id").notNull(),
-    refreshToken: varchar("refresh_token", { length: 512 }).notNull(),
+    refreshTokenHash: varchar("refresh_token_hash", { length: 64 }).notNull(),
     ipAddress: varchar("ip_address", { length: 45 }),
     expiresAt: timestamp("expires_at", { withTimezone: true, mode: "date" }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
