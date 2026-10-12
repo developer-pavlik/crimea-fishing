@@ -4,6 +4,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   timestamp,
   text,
   unique,
@@ -55,6 +56,28 @@ export const products = pgTable(
       name: "fk_product_seller",
       columns: [table.seller],
       foreignColumns: [users.id],
+    }).onDelete("cascade"),
+  ],
+);
+
+export const favorites = pgTable(
+  "favorites",
+  {
+    userId: uuid("user_id").notNull(),
+    productId: uuid("product_id").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.productId] }),
+    foreignKey({
+      name: "fk_favorite_user",
+      columns: [table.userId],
+      foreignColumns: [users.id],
+    }).onDelete("cascade"),
+    foreignKey({
+      name: "fk_favorite_product",
+      columns: [table.productId],
+      foreignColumns: [products.id],
     }).onDelete("cascade"),
   ],
 );
