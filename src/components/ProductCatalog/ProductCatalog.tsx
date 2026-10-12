@@ -1,13 +1,17 @@
 import styles from "./ProductCatalog.module.scss";
 import ProductGrid from "@/components/ProductGrid/ProductGrid";
-import { products } from "@/app/data";
 import ProductPanel from "@/components/ProductPanel/ProductPanel";
+import type { ProductTileProps } from "@/components/ProductTile/ProductTile";
 
-export default function ProductCatalog() {
+export interface ProductCatalogProps {
+    items: ProductTileProps[];
+}
+
+export default function ProductCatalog({ items }: ProductCatalogProps) {
     return (
         <div className={styles.mainPage}>
             <ProductPanel />
-            <ProductGrid items={products} />
+            <ProductGrid items={items} />
         </div>
     );
 }

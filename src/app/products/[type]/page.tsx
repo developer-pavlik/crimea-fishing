@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import ProductCatalog from "@/components/ProductCatalog/ProductCatalog";
+import { products } from "@/app/data";
 
 interface Props {
   params: Promise<{ type: string }>; // В Next.js 15+ params — это Promise
@@ -38,6 +39,6 @@ export default async function ProductTypePage({ params }: Props) {
   }
 
   return (
-    <ProductCatalog />
+    <ProductCatalog items={products} />
   );
 }
