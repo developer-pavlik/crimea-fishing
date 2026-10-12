@@ -6,12 +6,17 @@ import TextInput from '../ui/TextInput/TextInput';
 import Textarea from '../ui/Textarea/Textarea';
 import { Button } from '../ui/Button/Button';
 import ImgLoader from '../ImgLoader/ImgLoader';
+import Checkbox from '../ui/Checkbox/Checkbox';
+import Radio from '../ui/Radio/Radio';
 
 import DeleteIcon from '../../../public/icons/delete.svg';
+
+type ProductCondition = 'new' | 'used';
 
 interface ProductData {
     title: string;
     price: number;
+    condition: ProductCondition;
 }
 
 interface ProductFormProps {
@@ -22,12 +27,13 @@ interface ProductFormProps {
 export default function ProductForm({ initialData, onSubmit = async () => {} }: ProductFormProps) {
     const [title, setTitle] = useState(initialData?.title || '');
     const [price, setPrice] = useState(initialData?.price || 0);
+    const [condition, setCondition] = useState<ProductCondition>(initialData?.condition || 'new');
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
-        await onSubmit({ title, price });
+        await onSubmit({ title, price, condition });
         setLoading(false);
     };
 
@@ -41,11 +47,36 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
             <div className={styles.productFormField}>
                 <TextInput name='title' className={styles.input} placeholder='Заголовок товара' />
             </div>
-            <div className={styles.productFormField}>
-                <TextInput type='number' name='price' className={styles.input} placeholder='Цена в рублях' />
+            <div className={styles.productPriceInfo}>
+                <div className={styles.productFormField}>
+                    <TextInput type='number' name='price' className={styles.input} placeholder='Цена в рублях' />
+                </div>
+                <div className={styles.productFormField}>
+                    <Checkbox name="isFree" label="Отдам даром" />
+                </div>
             </div>
             <div className={styles.productFormField}>
                 <Textarea name='description'placeholder='Описание товара' />
+            </div>
+
+            <div className={styles.productCondition}>
+                <span className={styles.productConditionLabel}>Состояние товара</span>
+                <div className={styles.productConditionOptions}>
+                    <Radio
+                        name='condition'
+                        value='new'
+                        checked={condition === 'new'}
+                        onChange={() => setCondition('new')}
+                        label='Новое'
+                    />
+                    <Radio
+                        name='condition'
+                        value='used'
+                        checked={condition === 'used'}
+                        onChange={() => setCondition('used')}
+                        label='Б/У'
+                    />
+                </div>
             </div>
 
             <div className={styles.productSpecifications}>
