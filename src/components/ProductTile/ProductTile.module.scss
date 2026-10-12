@@ -38,6 +38,15 @@
     object-fit: cover;
 }
 
+.defaultImage {
+    position: absolute;
+    inset: 0;
+    width: 50%;
+    height: 50%;
+    margin: auto;
+    color: #aab4bd;
+}
+
 .content {
     display: flex;
     flex-grow: 1;

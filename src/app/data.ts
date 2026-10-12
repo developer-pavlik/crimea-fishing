@@ -5,7 +5,7 @@ export const products: ProductTileProps[] = [
 		id: "river-master-24",
 		title: "Спиннинг River Master 2.4 м",
 		price: 7490,
-		imagesUrl: ['https://ir.ozone.ru/s3/multimedia-1-j/wc2500/10706974903.jpg', 'https://ir.ozone.ru/s3/multimedia-1-w/wc2500/10706973728.jpg'],
+		imagesUrl: [],
 		href: "/products/river-master-24",
 		isFavorite: true,
 	},

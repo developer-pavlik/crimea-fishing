@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { useRef, useState } from 'react';
 import ProductTileMenu from '../ProductTileMenu/ProductTileMenu';
 import ProductTileFavoritesButton from '../ProductTileFavoritesButton/ProductTileFavoritesButton';
+import DefaultImgIcon from '../../../public/icons/empty-img.svg';
 
 import Link from "next/link";
 import cn from "clsx";
@@ -54,39 +55,43 @@ const ProductTile = ({
     return (
         <div className={styles.productTileWrapper}>
             <Link className={cn(styles.productTile, className)} href={href}>
-                {imagesUrl[0] && (
-                    <div className={styles.imageWrapper}>
-                        <Swiper
-                            className={styles.slider}                  
-                            modules={[Pagination]}
-                            pagination={{ clickable: false }}
-                            slidesPerView={1}
-                            loop={true}
-                            onSwiper={(swiper) => {
-                                swiperRef.current = swiper;
-                            }}
+                <div className={styles.imageWrapper}>
+                    {imagesUrl.length > 0 ? (
+                        <>
+                            <Swiper
+                                className={styles.slider}
+                                modules={[Pagination]}
+                                pagination={{ clickable: false }}
+                                slidesPerView={1}
+                                loop={true}
+                                onSwiper={(swiper) => {
+                                    swiperRef.current = swiper;
+                                }}
                             >
-                            {
-                                imagesUrl.map((imageUrl, index) => (
-                                    <SwiperSlide key={index}>
-                                        <Image
-                                            src={imageUrl}
-                                            alt={title}
-                                            className={styles.image}
-                                            fill
-                                        />
-                                    </SwiperSlide>
-                                ))
-                            }
-                        </Swiper>
-                        <button className={styles.sliderButtonPrev} onClick={(event) => handleNavClick(event, 'prev')}>
-                            <PrevIcon  className={styles.sliderButtonIcon}/>
-                        </button>
-                        <button className={styles.sliderButtonNext} onClick={(event) => handleNavClick(event, 'next')}>
-                            <NextIcon className={styles.sliderButtonIcon}/>
-                        </button>
-                    </div>
-                )}
+                                {
+                                    imagesUrl.map((imageUrl, index) => (
+                                        <SwiperSlide key={index}>
+                                            <Image
+                                                src={imageUrl}
+                                                alt={title}
+                                                className={styles.image}
+                                                fill
+                                            />
+                                        </SwiperSlide>
+                                    ))
+                                }
+                            </Swiper>
+                            <button className={styles.sliderButtonPrev} onClick={(event) => handleNavClick(event, 'prev')}>
+                                <PrevIcon className={styles.sliderButtonIcon} />
+                            </button>
+                            <button className={styles.sliderButtonNext} onClick={(event) => handleNavClick(event, 'next')}>
+                                <NextIcon className={styles.sliderButtonIcon} />
+                            </button>
+                        </>
+                    ) : (
+                        <DefaultImgIcon className={styles.defaultImage} aria-hidden="true" />
+                    )}
+                </div>
                 <div className={styles.content}>
                     <h3 className={styles.title}>{title}</h3>
                     <span className={styles.price}>{price} ₽</span>
@@ -102,5 +107,4 @@ const ProductTile = ({
 };
 
 export default ProductTile;
-
 
