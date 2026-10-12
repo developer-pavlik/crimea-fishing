@@ -4,41 +4,6 @@
     justify-content:  space-between;
 }
 
-.partOne {
-    display: flex;
-    gap: 16px;
-}
-
-.link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 24px;
-    min-height: 44px;
-    padding: 0 24px;
-    font-size: 16px;
-    text-decoration: none;
-    background: #90a6b7;
-    color: #fff;
-    font-weight: 600;
-    font-size: 14px;
-    text-transform: uppercase;
-
-    &:hover {
-        background: #a3b7c5 ;
-    }
-
-    &_active {
-        background: #4d6575;
-
-        &:hover {
-            background: #4d6575;
-        }
-    }
-
-    
-}
-
 .addProuctLink {
     display: flex;
     align-items: center;

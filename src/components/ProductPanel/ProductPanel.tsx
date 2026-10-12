@@ -1,44 +1,23 @@
-'use client';
 import PlusIcon from '../../../public/icons/plus.svg';
-
-import styles from './ProductPanel.module.scss'
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { getAccessSession } from '@/lib/auth';
+import ProductPanelNavigation from '../ProductPanelNavigation/ProductPanelNavigation';
+import styles from './ProductPanel.module.scss';
 
-const links = [
-    { title: 'Все товары', href: '/' },
-    { title: 'Б/У', href: '/products/used' },
-    { title: 'Новое', href: '/products/new' },
-    { title: 'Халява', href: '/products/free' },
-];
-
-const ProductPanel = () => {
-    const pathname = usePathname();
+const ProductPanel = async () => {
+    const session = await getAccessSession();
 
     return (
         <div className={styles.panel}>
-            <div className={styles.partOne}>
-                {links.map((link) => {
-                    const isActive = pathname === link.href;
-
-                    return (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={`${styles.link} ${isActive ? styles.link_active : ''}`}
-                            aria-current={isActive ? 'page' : undefined}
-                        >
-                            {link.title}
-                        </Link>
-                    );
-                })}
-            </div>
-            <div className={styles.partTwo}>
-                <Link className={styles.addProuctLink} href='/products/add'>
-                    <PlusIcon className={styles.plusIcon}  />
-                    <span>Добавить товар</span>
-                </Link>
-            </div>
+            <ProductPanelNavigation />
+            {session && (
+                <div className={styles.addProuctLinkWrapper}>
+                    <Link className={styles.addProuctLink} href='/products/add'>
+                        <PlusIcon className={styles.plusIcon} />
+                        <span>Добавить товар</span>
+                    </Link>
+                </div>
+            )}
         </div>
     );
 };
