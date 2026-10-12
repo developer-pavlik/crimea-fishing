@@ -1,6 +1,7 @@
 import {
   bigint,
   foreignKey,
+  jsonb,
   pgEnum,
   pgTable,
   timestamp,
@@ -17,6 +18,8 @@ export const userRole = pgEnum("user_role", [
   "superadmin",
 ]);
 
+export const productCondition = pgEnum("product_condition", ["new", "used"]);
+
 export const users = pgTable(
   "users",
   {
@@ -30,6 +33,29 @@ export const users = pgTable(
   (table) => [
     unique("users_username_key").on(table.username),
     unique("users_telegram_id_key").on(table.telegramId),
+  ],
+);
+
+export const products = pgTable(
+  "products",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    title: varchar("title", { length: 255 }).notNull(),
+    price: bigint("price", { mode: "number" }).notNull(),
+    condition: productCondition("condition").default("new").notNull(),
+    imagesUrl: text("images_url").array().default([]).notNull(),
+    description: text("description"),
+    specifications: jsonb("specifications").default({}).notNull(),
+    seller: uuid("seller").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).defaultNow(),
+  },
+  (table) => [
+    foreignKey({
+      name: "fk_product_seller",
+      columns: [table.seller],
+      foreignColumns: [users.id],
+    }).onDelete("cascade"),
   ],
 );
 
