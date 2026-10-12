@@ -25,16 +25,15 @@ export interface ProductTileProps {
     title: string;
     price: number;
     imagesUrl: string[];
-    href: string;
     className?: string;
 }
 
 const ProductTile = ({
+    id,
     isFavorite,
     title,
     price,
     imagesUrl,
-    href,
     className,
 }: ProductTileProps) => {
 
@@ -54,7 +53,7 @@ const ProductTile = ({
 
     return (
         <div className={styles.productTileWrapper}>
-            <Link className={cn(styles.productTile, className)} href={href}>
+            <Link className={cn(styles.productTile, className)} href={`/product/${id}`}>
                 <div className={styles.imageWrapper}>
                     {imagesUrl.length > 0 ? (
                         <>
@@ -107,4 +106,3 @@ const ProductTile = ({
 };
 
 export default ProductTile;
-

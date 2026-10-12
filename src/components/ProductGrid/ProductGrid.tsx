@@ -15,7 +15,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({  className, items}) => {
     return (
         <div className={cn(styles.productGrid, className)}>
             {items.map((item) => (
-                <ProductTile key={item.href} {...item} />
+                <ProductTile key={item.id} {...item} />
             ))}
         </div>
     )
