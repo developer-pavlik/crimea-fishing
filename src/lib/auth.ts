@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
-import { and, eq } from "drizzle-orm";
+import { and, eq, gt } from "drizzle-orm";
 import { cookies } from "next/headers";
 import { createRemoteJWKSet, errors, jwtVerify, SignJWT } from "jose";
 import { db } from "@/db";
@@ -27,6 +27,10 @@ export interface TokenPair {
   refreshTokenHash: string;
   refreshExpiresAt: Date;
 }
+
+export type RefreshTokenRotationResult =
+  | { success: true; tokens: TokenPair }
+  | { success: false; error: "invalid_refresh_token" | "session_expired" | "refresh_token_reused" };
 
 let telegramJwks: ReturnType<typeof createRemoteJWKSet> | undefined;
 
@@ -167,7 +171,7 @@ async function verifyAppToken(
       algorithms: ["HS256"],
       issuer: TOKEN_ISSUER,
       audience: TOKEN_AUDIENCE,
-      clockTolerance: "5s",
+      clockTolerance: tokenUse === "access" ? 0 : "5s",
       requiredClaims: ["exp", "iat", "sub", "sessionId", "tokenUse"],
       ...(allowExpired
         ? { ignoreExp: true }
@@ -202,6 +206,60 @@ export function verifyRefreshToken(token: string | undefined, allowExpired = fal
   return verifyAppToken(token, "refresh", allowExpired);
 }
 
+export async function rotateRefreshToken(
+  refreshToken: string | undefined,
+): Promise<RefreshTokenRotationResult> {
+  const claims = await verifyRefreshToken(refreshToken);
+
+  if (!refreshToken || !claims) {
+    return { success: false, error: "invalid_refresh_token" };
+  }
+
+  const now = new Date();
+  const [session] = await db
+    .select({ refreshTokenHash: sessions.refreshTokenHash })
+    .from(sessions)
+    .where(
+      and(
+        eq(sessions.id, claims.sessionId),
+        eq(sessions.userId, claims.userId),
+        gt(sessions.expiresAt, now),
+      ),
+    )
+    .limit(1);
+
+  if (!session) {
+    return { success: false, error: "session_expired" };
+  }
+
+  if (!matchesRefreshTokenHash(refreshToken, session.refreshTokenHash)) {
+    return { success: false, error: "refresh_token_reused" };
+  }
+
+  const tokens = await createTokenPair(claims.userId, claims.sessionId);
+  const [updatedSession] = await db
+    .update(sessions)
+    .set({
+      refreshTokenHash: tokens.refreshTokenHash,
+      expiresAt: tokens.refreshExpiresAt,
+    })
+    .where(
+      and(
+        eq(sessions.id, claims.sessionId),
+        eq(sessions.userId, claims.userId),
+        eq(sessions.refreshTokenHash, session.refreshTokenHash),
+        gt(sessions.expiresAt, now),
+      ),
+    )
+    .returning({ id: sessions.id });
+
+  if (!updatedSession) {
+    return { success: false, error: "refresh_token_reused" };
+  }
+
+  return { success: true, tokens };
+}
+
 export async function getAccessSession() {
   const cookieStore = await cookies();
   return verifyAccessToken(cookieStore.get(ACCESS_COOKIE_NAME)?.value);
@@ -212,7 +270,7 @@ export async function hasAuthCookie() {
   return cookieStore.has(ACCESS_COOKIE_NAME) || cookieStore.has(REFRESH_COOKIE_NAME);
 }
 
-const cookieOptions = {
+export const AUTH_COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: "lax" as const,
@@ -223,11 +281,11 @@ export async function setAuthCookies(tokens: Pick<TokenPair, "accessToken" | "re
   const cookieStore = await cookies();
 
   cookieStore.set(ACCESS_COOKIE_NAME, tokens.accessToken, {
-    ...cookieOptions,
+    ...AUTH_COOKIE_OPTIONS,
     maxAge: ACCESS_TOKEN_TTL_SECONDS,
   });
   cookieStore.set(REFRESH_COOKIE_NAME, tokens.refreshToken, {
-    ...cookieOptions,
+    ...AUTH_COOKIE_OPTIONS,
     maxAge: REFRESH_TOKEN_TTL_SECONDS,
   });
 }

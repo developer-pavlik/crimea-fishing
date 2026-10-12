@@ -1,72 +1,35 @@
-import { and, eq, gt } from "drizzle-orm";
 import { cookies } from "next/headers";
-import { db } from "@/db";
-import { sessions } from "@/db/schema";
 import {
+  ACCESS_COOKIE_NAME,
+  AUTH_COOKIE_OPTIONS,
+  ACCESS_TOKEN_TTL_SECONDS,
   REFRESH_COOKIE_NAME,
+  REFRESH_TOKEN_TTL_SECONDS,
   clearAuthCookies,
-  createTokenPair,
-  matchesRefreshTokenHash,
-  setAuthCookies,
-  verifyRefreshToken,
+  rotateRefreshToken,
 } from "@/lib/auth";
 
 export async function POST() {
   const cookieStore = await cookies();
   const refreshToken = cookieStore.get(REFRESH_COOKIE_NAME)?.value;
-  const claims = await verifyRefreshToken(refreshToken);
+  const result = await rotateRefreshToken(refreshToken);
 
-  if (!refreshToken || !claims) {
-    await clearAuthCookies();
-    return Response.json({ error: "invalid_refresh_token" }, { status: 401 });
+  if (!result.success) {
+    if (result.error !== "refresh_token_reused") {
+      await clearAuthCookies();
+    }
+
+    return Response.json({ error: result.error }, { status: 401 });
   }
 
-  const now = new Date();
-  const [session] = await db
-    .select({
-      userId: sessions.userId,
-      refreshTokenHash: sessions.refreshTokenHash,
-    })
-    .from(sessions)
-    .where(
-      and(
-        eq(sessions.id, claims.sessionId),
-        eq(sessions.userId, claims.userId),
-        gt(sessions.expiresAt, now),
-      ),
-    )
-    .limit(1);
-
-  if (!session) {
-    await clearAuthCookies();
-    return Response.json({ error: "session_expired" }, { status: 401 });
-  }
-
-  if (!matchesRefreshTokenHash(refreshToken, session.refreshTokenHash)) {
-    return Response.json({ error: "refresh_token_reused" }, { status: 401 });
-  }
-
-  const tokens = await createTokenPair(claims.userId, claims.sessionId);
-  const [updatedSession] = await db
-    .update(sessions)
-    .set({
-      refreshTokenHash: tokens.refreshTokenHash,
-      expiresAt: tokens.refreshExpiresAt,
-    })
-    .where(
-      and(
-        eq(sessions.id, claims.sessionId),
-        eq(sessions.userId, claims.userId),
-        eq(sessions.refreshTokenHash, session.refreshTokenHash),
-        gt(sessions.expiresAt, now),
-      ),
-    )
-    .returning({ id: sessions.id });
-
-  if (!updatedSession) {
-    return Response.json({ error: "refresh_token_reused" }, { status: 401 });
-  }
-
-  await setAuthCookies(tokens);
+  const { accessToken, refreshToken: rotatedRefreshToken } = result.tokens;
+  cookieStore.set(ACCESS_COOKIE_NAME, accessToken, {
+    ...AUTH_COOKIE_OPTIONS,
+    maxAge: ACCESS_TOKEN_TTL_SECONDS,
+  });
+  cookieStore.set(REFRESH_COOKIE_NAME, rotatedRefreshToken, {
+    ...AUTH_COOKIE_OPTIONS,
+    maxAge: REFRESH_TOKEN_TTL_SECONDS,
+  });
   return Response.json({ success: true });
 }
