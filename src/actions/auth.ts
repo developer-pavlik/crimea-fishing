@@ -38,7 +38,7 @@ async function getClientIpAddress() {
 }
 
 function getTelegramUserProfile(payload: Record<string, unknown>): TelegramUserProfile | null {
-  const profile: TelegramUserProfile = {};
+  const profile: TelegramUserProfile = { photoUrl: null };
 
   if ("picture" in payload) {
     if (payload.picture !== null && typeof payload.picture !== "string") {
