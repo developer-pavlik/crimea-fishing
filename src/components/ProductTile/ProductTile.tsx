@@ -35,7 +35,8 @@ const ProductTile = ({
     price,
     imagesUrl,
     className,
-}: ProductTileProps) => {
+    isAuthenticated,
+}: ProductTileProps & { isAuthenticated: boolean }) => {
 
     const swiperRef = useRef<SwiperInstance | null>(null);
     const [favorite, setFavorite] = useState(isFavorite);
@@ -97,10 +98,12 @@ const ProductTile = ({
                 </div>
             </Link>
             <ProductTileMenu />
-            <ProductTileFavoritesButton
-                isFavorite={favorite}
-                onFavoriteChange={setFavorite}
-            />
+            {isAuthenticated && (
+                <ProductTileFavoritesButton
+                    isFavorite={favorite}
+                    onFavoriteChange={setFavorite}
+                />
+            )}
         </div>
     );
 };
