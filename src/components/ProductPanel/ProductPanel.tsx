@@ -8,16 +8,18 @@ const ProductPanel = async () => {
     const session = await getAccessSession();
 
     return (
-        <div className={styles.panel}>
-            <ProductPanelNavigation />
-            {session && (
-                <div className={styles.addProuctLinkWrapper}>
-                    <Link className={styles.addProuctLink} href='/products/add'>
-                        <PlusIcon className={styles.plusIcon} />
-                        <span>Добавить товар</span>
-                    </Link>
-                </div>
-            )}
+        <div className={styles.panelWrapper}>
+            <div className={styles.panel}>
+                <ProductPanelNavigation />
+                {session && (
+                    <div className={styles.addProuctLinkWrapper}>
+                        <Link className={styles.addProuctLink} href='/products/add'>
+                            <PlusIcon className={styles.plusIcon} />
+                            <span>Добавить товар</span>
+                        </Link>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

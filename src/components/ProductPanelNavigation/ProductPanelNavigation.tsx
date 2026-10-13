@@ -23,6 +23,12 @@ const ProductPanelNavigation = () => {
                     <Link
                         key={link.href}
                         href={link.href}
+                        scroll={false}
+                        onNavigate={() => {
+                            if (!isActive) {
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                        }}
                         className={`${styles.link} ${isActive ? styles.link_active : ''}`}
                         aria-current={isActive ? 'page' : undefined}
                     >
