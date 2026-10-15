@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import cn from "clsx";
 import ProductTile from "../ProductTile/ProductTile";
 import type { ProductPage } from "@/types/product-catalog";
+import type { ProductCategory } from "@/lib/products";
 import styles from "./ProductGrid.module.scss";
 
 const MAX_AUTOMATIC_RETRIES = 3;
@@ -75,12 +76,14 @@ export interface InfiniteProductGridProps {
     className?: string;
     initialPage: ProductPage;
     isAuthenticated: boolean;
+    category?: ProductCategory;
 }
 
 export default function InfiniteProductGrid({
     className,
     initialPage,
     isAuthenticated,
+    category,
 }: InfiniteProductGridProps) {
     const [items, setItems] = useState(initialPage.items);
     const [nextCursor, setNextCursor] = useState(initialPage.nextCursor);
@@ -137,8 +140,15 @@ export default function InfiniteProductGrid({
                 }, REQUEST_TIMEOUT_MS);
 
                 try {
+                    const searchParams = new URLSearchParams({
+                        cursor: nextCursor,
+                    });
+                    if (category) {
+                        searchParams.set("category", category);
+                    }
+
                     const response = await fetch(
-                        `/api/products?cursor=${encodeURIComponent(nextCursor)}`,
+                        `/api/products?${searchParams.toString()}`,
                         { signal: requestController.signal },
                     );
                     let result: unknown;
@@ -237,7 +247,7 @@ export default function InfiniteProductGrid({
                 setIsLoading(false);
             }
         }
-    }, [hasMore, nextCursor]);
+    }, [category, hasMore, nextCursor]);
 
     useEffect(() => {
         const sentinel = sentinelRef.current;

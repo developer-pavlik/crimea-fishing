@@ -1,28 +1,27 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import ProductCatalog from "@/components/ProductCatalog/ProductCatalog";
-import { products } from "@/app/data";
+import { getAccessSession } from "@/lib/auth";
+import {
+  getProductPage,
+  isProductCategory,
+  type ProductCategory,
+} from "@/lib/products";
 
 interface Props {
   params: Promise<{ type: string }>; // В Next.js 15+ params — это Promise
 }
 
-const CATEGORY_TITLES = {
+const CATEGORY_TITLES: Record<ProductCategory, string> = {
   free: 'Бесплатные снасти',
   new: 'Новые снасти',
   used: 'Снасти б/у',
-} as const;
-
-type ProductType = keyof typeof CATEGORY_TITLES;
-
-function isProductType(type: string): type is ProductType {
-  return type in CATEGORY_TITLES;
-}
+};
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { type } = await params;
 
-  if (!isProductType(type)) {
+  if (!isProductCategory(type)) {
     notFound();
   }
 
@@ -34,11 +33,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ProductTypePage({ params }: Props) {
   const { type } = await params;
 
-  if (!isProductType(type)) {
+  if (!isProductCategory(type)) {
     notFound();
   }
 
+  const session = await getAccessSession();
+  const initialPage = await getProductPage(null, session?.userId, type);
+
   return (
-    <ProductCatalog items={products} />
+    <ProductCatalog initialPage={initialPage} category={type} />
   );
 }

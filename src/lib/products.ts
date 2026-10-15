@@ -14,6 +14,12 @@ interface ProductCursor {
     id: string;
 }
 
+export type ProductCategory = "free" | "new" | "used";
+
+export function isProductCategory(value: string): value is ProductCategory {
+    return value === "free" || value === "new" || value === "used";
+}
+
 const CURSOR_TIMESTAMP_PATTERN =
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z$/;
 
@@ -76,6 +82,7 @@ function decodeCursor(value: string): ProductCursor {
 export async function getProductPage(
     cursorValue: string | null,
     userId?: string,
+    category?: ProductCategory,
 ): Promise<ProductPage> {
     const cursor = cursorValue === null ? null : decodeCursor(cursorValue);
     const normalizedCreatedAt = sql<Date>`coalesce(
@@ -103,6 +110,17 @@ export async function getProductPage(
                 and ${favorites.productId} = ${products.id}
           )`
         : sql<boolean>`false`;
+    const categoryCondition =
+        category === "free"
+            ? eq(products.price, 0)
+            : category
+              ? eq(products.condition, category)
+              : undefined;
+    const whereCondition = cursorCondition
+        ? categoryCondition
+            ? and(cursorCondition, categoryCondition)
+            : cursorCondition
+        : categoryCondition;
 
     const rows = await db
         .select({
@@ -117,7 +135,7 @@ export async function getProductPage(
             isFavorite: favoriteExpression,
         })
         .from(products)
-        .where(cursorCondition)
+        .where(whereCondition)
         .orderBy(desc(normalizedCreatedAt), desc(products.id))
         .limit(PRODUCTS_PER_PAGE + 1);
 
