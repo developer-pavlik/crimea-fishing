@@ -1,10 +1,15 @@
 import ProductCatalog from "@/components/ProductCatalog/ProductCatalog";
+import ProductCatalogError from "@/components/ProductCatalogError/ProductCatalogError";
 import { getAccessSession } from "@/lib/auth";
-import { getProductPage } from "@/lib/products";
+import { getInitialProductPage } from "@/lib/products";
 
 export default async function ProductsPage() {
     const session = await getAccessSession();
-    const initialPage = await getProductPage(null, session?.userId);
+    const result = await getInitialProductPage(session?.userId);
 
-    return <ProductCatalog initialPage={initialPage} />;
+    if (!result.ok) {
+        return <ProductCatalogError />;
+    }
+
+    return <ProductCatalog initialPage={result.page} />;
 }

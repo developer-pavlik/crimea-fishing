@@ -30,6 +30,32 @@ export class InvalidProductCursorError extends Error {
     }
 }
 
+export class ProductQueryError extends Error {
+    constructor(readonly cause: unknown) {
+        super("Не удалось выполнить запрос списка товаров.");
+        this.name = "ProductQueryError";
+    }
+}
+
+export async function getInitialProductPage(
+    userId?: string,
+    category?: ProductCategory,
+): Promise<{ ok: true; page: ProductPage } | { ok: false }> {
+    try {
+        return {
+            ok: true,
+            page: await getProductPage(null, userId, category),
+        };
+    } catch (error) {
+        if (!(error instanceof ProductQueryError)) {
+            throw error;
+        }
+
+        console.error("Failed to load initial product page", error.cause);
+        return { ok: false };
+    }
+}
+
 function encodeCursor(cursor: ProductCursor): string {
     return Buffer.from(JSON.stringify(cursor)).toString("base64url");
 }
@@ -137,7 +163,10 @@ export async function getProductPage(
         .from(products)
         .where(whereCondition)
         .orderBy(desc(normalizedCreatedAt), desc(products.id))
-        .limit(PRODUCTS_PER_PAGE + 1);
+        .limit(PRODUCTS_PER_PAGE + 1)
+        .catch((cause: unknown) => {
+            throw new ProductQueryError(cause);
+        });
 
     const hasMore = rows.length > PRODUCTS_PER_PAGE;
     const pageRows = rows.slice(0, PRODUCTS_PER_PAGE);

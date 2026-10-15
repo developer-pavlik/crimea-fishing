@@ -1,9 +1,10 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import ProductCatalog from "@/components/ProductCatalog/ProductCatalog";
+import ProductCatalogError from "@/components/ProductCatalogError/ProductCatalogError";
 import { getAccessSession } from "@/lib/auth";
 import {
-  getProductPage,
+  getInitialProductPage,
   isProductCategory,
   type ProductCategory,
 } from "@/lib/products";
@@ -38,9 +39,13 @@ export default async function ProductTypePage({ params }: Props) {
   }
 
   const session = await getAccessSession();
-  const initialPage = await getProductPage(null, session?.userId, type);
+  const result = await getInitialProductPage(session?.userId, type);
+
+  if (!result.ok) {
+    return <ProductCatalogError />;
+  }
 
   return (
-    <ProductCatalog initialPage={initialPage} category={type} />
+    <ProductCatalog initialPage={result.page} category={type} />
   );
 }
