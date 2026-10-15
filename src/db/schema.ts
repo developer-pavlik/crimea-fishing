@@ -1,6 +1,7 @@
 import {
   bigint,
   foreignKey,
+  index,
   jsonb,
   pgEnum,
   pgTable,
@@ -11,6 +12,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const userRole = pgEnum("user_role", [
   "user",
@@ -57,6 +59,10 @@ export const products = pgTable(
       columns: [table.seller],
       foreignColumns: [users.id],
     }).onDelete("cascade"),
+    index("products_created_at_id_idx").on(
+      sql`coalesce(${table.createdAt}, '1970-01-01 00:00:00+00'::timestamptz)`,
+      table.id.desc(),
+    ),
   ],
 );
 

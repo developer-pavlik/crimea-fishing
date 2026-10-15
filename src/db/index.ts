@@ -14,9 +14,11 @@ export const pool =
   globalForPg.pgPool ??
   new Pool({
     connectionString,
-    max: 1,
-    idleTimeoutMillis: 10_000,
-    connectionTimeoutMillis: 5_000,
+    max: 5,
+    query_timeout: 3000, 
+    statement_timeout: 3000, 
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 2000,
     allowExitOnIdle: true,
   });
 
