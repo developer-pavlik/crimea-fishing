@@ -3,3 +3,26 @@
     gap: 12px;
     grid-template-columns: repeat(5, 1fr);
 }
+
+.loadSentinel {
+    height: 1px;
+}
+
+.loadState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 48px;
+    color: #626b73;
+    text-align: center;
+}
+
+.retryButton {
+    padding: 8px 12px;
+    border: 1px solid currentColor;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
