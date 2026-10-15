@@ -100,6 +100,7 @@ const ProductTile = ({
             <ProductTileMenu />
             {isAuthenticated && (
                 <ProductTileFavoritesButton
+                    productId={id}
                     isFavorite={favorite}
                     onFavoriteChange={setFavorite}
                 />
