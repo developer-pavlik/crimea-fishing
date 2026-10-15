@@ -18,7 +18,7 @@ export const pool =
     query_timeout: 3000, 
     statement_timeout: 3000, 
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    connectionTimeoutMillis: 2001,
     allowExitOnIdle: true,
   });
 
