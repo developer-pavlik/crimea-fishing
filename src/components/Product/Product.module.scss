@@ -16,6 +16,22 @@
     gap: 4px;
 }
 
+.titleWrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+
+.favoriteButton {
+    align-self: start;
+
+    button {
+        width: 32px;
+        height: 32px;
+    }
+}
+
 .price {
     font-size: 32px;
     font-weight: 700;

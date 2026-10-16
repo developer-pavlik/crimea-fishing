@@ -32,10 +32,11 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
 export default async function ProductPage({ params }: ProductPageProps) {
     const { id } = await params;
+    const session = await getAccessSession();
     let product;
 
     try {
-        product = await loadProduct(id);
+        product = await getProductById(id, session?.userId);
     } catch (error) {
         if (error instanceof ProductDetailsQueryError) {
             console.error("Failed to load product page", error.cause);
@@ -50,12 +51,14 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
     return (
         <Product
+            id={product.id}
             title={product.title}
             price={product.price}
             imagesUrl={product.imagesUrl}
             description={product.description}
             specifications={product.specifications}
             inFavorites={product.isFavorite}
+            isAuthenticated={Boolean(session)}
             author={product.author}
         />
     );

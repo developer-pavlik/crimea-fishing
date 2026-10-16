@@ -20,10 +20,11 @@ const ProductFavoriteButton = ({
     onFavoriteChange,
 }: ProductFavoriteButtonProps) => {
     const [isPending, startTransition] = useTransition();
+    const [favorite, setFavoriteState] = useState(isFavorite);
     const [error, setError] = useState<string | null>(null);
 
     const handleClick = () => {
-        const nextIsFavorite = !isFavorite;
+        const nextIsFavorite = !favorite;
         setError(null);
 
         startTransition(async () => {
@@ -41,6 +42,7 @@ const ProductFavoriteButton = ({
                     return;
                 }
 
+                setFavoriteState(nextIsFavorite);
                 onFavoriteChange?.(nextIsFavorite);
             } catch {
                 setError("Не удалось изменить избранное. Попробуйте ещё раз.");
@@ -52,9 +54,9 @@ const ProductFavoriteButton = ({
         <div className={cn(styles.favoriteButtonRoot, className)}>
             <button
                 type="button"
-                className={cn(styles.favoriteButton, { [styles.favoriteButton_active]: isFavorite })}
-                aria-label={isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
-                aria-pressed={isFavorite}
+                className={cn(styles.favoriteButton, { [styles.favoriteButton_active]: favorite })}
+                aria-label={favorite ? "Удалить из избранного" : "Добавить в избранное"}
+                aria-pressed={favorite}
                 aria-busy={isPending}
                 disabled={isPending}
                 onClick={handleClick}

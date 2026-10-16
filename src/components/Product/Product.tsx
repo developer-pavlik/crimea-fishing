@@ -4,29 +4,41 @@ import styles from './Product.module.scss'
 import { Button } from '@/components/ui/Button/Button'
 import Link from 'next/link'
 import ProductSlider from '@/components/ProductSlider/ProductSlider'
+import ProductFavoritesButton from '@/components/ProductFavoriteButton/ProductFavoriteButton'
 
 
 
 
 export interface ProductProps {
+    id: string;
     title: string;
     price: number;
     imagesUrl?: string[];
     description?: string | null;
     specifications?: Record<string, string>;
-    inFavorites?: boolean;
+    inFavorites: boolean;
+    isAuthenticated: boolean;
     author:  {
         name: string;
         avatarUrl?: string | null;
     };
 }
 
-const Product: React.FC<ProductProps> = ({ title, price, description, specifications, author, imagesUrl }) => {
+const Product: React.FC<ProductProps> = ({ id, title, price, description, specifications, author, imagesUrl, inFavorites, isAuthenticated }) => {
     return (
         <div className={styles.product}>
             <div className={styles.content}>
                 <div className={styles.main}>
-                    <h1 className={styles.title}>{title}</h1>
+                    <div className={styles.titleWrapper}> 
+                        <h1 className={styles.title}>{title}</h1>
+                        {isAuthenticated && (
+                            <ProductFavoritesButton
+                                productId={id}
+                                isFavorite={inFavorites}
+                                className={styles.favoriteButton}
+                            />
+                        )}
+                    </div>
                     {imagesUrl && imagesUrl.length > 0 && <ProductSlider imagesUrl={imagesUrl} />}
                     {description && <div className={styles.description}>{description}</div>}
                     {specifications && Object.keys(specifications).length > 0 && (
@@ -43,7 +55,6 @@ const Product: React.FC<ProductProps> = ({ title, price, description, specificat
                 <div className={styles.sidebar}>
                     <div className={styles.price}>{price} ₽</div>
                     <Button className={styles.buyButton}>Написать продавцу</Button>
-
                     <div className={styles.sellerBox}>
                         <div className={styles.sellerLabel}>Продавец:</div>
                         <Link href="/chat" className={styles.seller}>
