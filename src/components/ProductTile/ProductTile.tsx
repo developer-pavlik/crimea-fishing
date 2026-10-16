@@ -18,6 +18,7 @@ import 'swiper/css/pagination';
 
 import PrevIcon from '../../../public/icons/prev.svg';
 import NextIcon from '../../../public/icons/next.svg';
+import { formatPrice } from '@/lib/formatPrice';
 
 export interface ProductTileProps {
     id: string;
@@ -94,7 +95,7 @@ const ProductTile = ({
                 </div>
                 <div className={styles.content}>
                     <h3 className={styles.title}>{title}</h3>
-                    <span className={styles.price}>{price} ₽</span>
+                    <span className={styles.price}>{formatPrice(price)} ₽</span>
                 </div>
             </Link>
             <ProductTileMenu />

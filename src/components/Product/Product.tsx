@@ -8,6 +8,7 @@ import ProductFavoritesButton from '@/components/ProductFavoriteButton/ProductFa
 
 import DeleteIcon from '../../../public/icons/delete.svg';
 import EditIcon from '../../../public/icons/edit.svg';
+import { formatPrice } from '@/lib/formatPrice';
 
 
 export interface ProductProps {
@@ -54,7 +55,7 @@ const Product: React.FC<ProductProps> = ({ id, title, price, description, specif
                     )}
                 </div>
                 <div className={styles.sidebar}>
-                    <div className={styles.price}>{price} ₽</div>
+                    <div className={styles.price}>{formatPrice(price)} ₽</div>
                     <Button className={styles.buyButton}>Написать продавцу</Button>
                     <div className={styles.sellerBox}>
                         <div className={styles.sellerLabel}>Продавец:</div>
