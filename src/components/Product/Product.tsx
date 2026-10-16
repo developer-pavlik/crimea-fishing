@@ -6,7 +6,8 @@ import Link from 'next/link'
 import ProductSlider from '@/components/ProductSlider/ProductSlider'
 import ProductFavoritesButton from '@/components/ProductFavoriteButton/ProductFavoriteButton'
 
-
+import DeleteIcon from '../../../public/icons/delete.svg';
+import EditIcon from '../../../public/icons/edit.svg';
 
 
 export interface ProductProps {
@@ -72,6 +73,16 @@ const Product: React.FC<ProductProps> = ({ id, title, price, description, specif
                             )}
                             <div className={styles.sellerName}>{author.name}</div>
                         </Link>
+                    </div>
+                    <div className={styles.adminBox}>
+                        <Button view="secondary" className={styles.editButton}>
+                            <EditIcon className={styles.editIcon} />
+                            <span>Редактировать</span>
+                        </Button>
+                        <Button view="negative" className={styles.deleteButton}>
+                            <DeleteIcon className={styles.deleteIcon} />
+                            <span>Удалить</span>
+                        </Button>
                     </div>
                 </div>
             </div>
