@@ -6,7 +6,7 @@ import { Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useRef, useState } from 'react';
 import ProductTileMenu from '../ProductTileMenu/ProductTileMenu';
-import ProductTileFavoritesButton from '../ProductTileFavoritesButton/ProductTileFavoritesButton';
+import ProductFavoriteButton from '../ProductFavoriteButton/ProductFavoriteButton';
 import DefaultImgIcon from '../../../public/icons/empty-img.svg';
 
 import Link from "next/link";
@@ -99,9 +99,10 @@ const ProductTile = ({
             </Link>
             <ProductTileMenu />
             {isAuthenticated && (
-                <ProductTileFavoritesButton
+                <ProductFavoriteButton
                     productId={id}
                     isFavorite={favorite}
+                    className={styles.favoriteButton}
                     onFavoriteChange={setFavorite}
                 />
             )}

@@ -2,21 +2,23 @@
 
 import { useState, useTransition } from "react";
 import { setFavorite } from "@/actions/favorites";
-import styles from './ProductTileFavoritesButton.module.scss'
+import styles from './ProductFavoriteButton.module.scss'
 import FavoritesIcon from '../../../public/icons/heart.svg';
 import cn from "clsx";
 
-interface ProductTileFavoritesButtonProps {
+interface ProductFavoriteButtonProps {
     productId: string;
     isFavorite: boolean;
+    className?: string;
     onFavoriteChange?: (isFavorite: boolean) => void;
 }
 
-const ProductTileFavoritesButton = ({
+const ProductFavoriteButton = ({
     productId,
     isFavorite,
+    className,
     onFavoriteChange,
-}: ProductTileFavoritesButtonProps) => {
+}: ProductFavoriteButtonProps) => {
     const [isPending, startTransition] = useTransition();
     const [error, setError] = useState<string | null>(null);
 
@@ -47,21 +49,21 @@ const ProductTileFavoritesButton = ({
     };
 
     return (
-        <>
+        <div className={cn(styles.favoriteButtonRoot, className)}>
             <button
                 type="button"
-                className={cn(styles.favoritesButton, { [styles.favoritesButton_active]: isFavorite })}
+                className={cn(styles.favoriteButton, { [styles.favoriteButton_active]: isFavorite })}
                 aria-label={isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
                 aria-pressed={isFavorite}
                 aria-busy={isPending}
                 disabled={isPending}
                 onClick={handleClick}
             >
-                <FavoritesIcon className={styles.favoritesIcon} />
+                <FavoritesIcon className={styles.favoriteIcon} />
             </button>
-            {error && <span className={styles.favoritesError} role="alert">{error}</span>}
-        </>
+            {error && <span className={styles.favoriteError} role="alert">{error}</span>}
+        </div>
     );
 };
 
-export default ProductTileFavoritesButton
+export default ProductFavoriteButton
