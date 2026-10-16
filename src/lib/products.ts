@@ -2,12 +2,16 @@ import "server-only";
 
 import { and, desc, eq, lt, or, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { favorites, products } from "@/db/schema";
+import { favorites, products, users } from "@/db/schema";
 import type { ProductPage } from "@/types/product-catalog";
 
 const PRODUCTS_PER_PAGE = 20;
 const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+export function isProductId(value: string) {
+    return UUID_PATTERN.test(value);
+}
 
 interface ProductCursor {
     createdAt: string;
@@ -36,6 +40,97 @@ export class ProductQueryError extends Error {
         this.name = "ProductQueryError";
     }
 }
+
+export class ProductDetailsQueryError extends Error {
+    constructor(readonly cause: unknown) {
+        super("Не удалось выполнить запрос товара.");
+        this.name = "ProductDetailsQueryError";
+    }
+}
+
+export interface ProductDetails {
+    id: string;
+    title: string;
+    price: number;
+    imagesUrl: string[];
+    description: string | null;
+    specifications: Record<string, string>;
+    isFavorite: boolean;
+    author: {
+        name: string;
+        avatarUrl: string | null;
+    };
+}
+
+function normalizeSpecifications(value: unknown): Record<string, string> {
+    if (typeof value !== "object" || value === null || Array.isArray(value)) {
+        return {};
+    }
+
+    return Object.fromEntries(
+        Object.entries(value).filter(
+            ([key, item]) => key.trim().length > 0 && typeof item === "string",
+        ),
+    );
+}
+
+export async function getProductById(
+    productId: string,
+    userId?: string,
+): Promise<ProductDetails | null> {
+    if (!isProductId(productId)) {
+        return null;
+    }
+
+    const favoriteExpression = userId
+        ? sql<boolean>`exists (
+              select 1
+              from ${favorites}
+              where ${favorites.userId} = ${userId}
+                and ${favorites.productId} = ${products.id}
+          )`
+        : sql<boolean>`false`;
+
+    try {
+        const [row] = await db
+            .select({
+                id: products.id,
+                title: products.title,
+                price: products.price,
+                imagesUrl: products.imagesUrl,
+                description: products.description,
+                specifications: products.specifications,
+                isFavorite: favoriteExpression,
+                sellerName: users.username,
+                sellerAvatarUrl: users.photoUrl,
+            })
+            .from(products)
+            .innerJoin(users, eq(products.seller, users.id))
+            .where(eq(products.id, productId))
+            .limit(1);
+
+        if (!row) {
+            return null;
+        }
+
+        return {
+            id: row.id,
+            title: row.title,
+            price: row.price,
+            imagesUrl: row.imagesUrl,
+            description: row.description,
+            specifications: normalizeSpecifications(row.specifications),
+            isFavorite: row.isFavorite,
+            author: {
+                name: row.sellerName ?? "Пользователь",
+                avatarUrl: row.sellerAvatarUrl,
+            },
+        };
+    } catch (cause) {
+        throw new ProductDetailsQueryError(cause);
+    }
+}
+
 
 export async function getInitialProductPage(
     userId?: string,

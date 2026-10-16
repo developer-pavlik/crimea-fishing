@@ -1,4 +1,5 @@
 import React from 'react'
+import Image from 'next/image'
 import styles from './Product.module.scss'
 import { Button } from '@/components/ui/Button/Button'
 import Link from 'next/link'
@@ -11,12 +12,12 @@ export interface ProductProps {
     title: string;
     price: number;
     imagesUrl?: string[];
-    description: string;
+    description?: string | null;
     specifications?: Record<string, string>;
     inFavorites?: boolean;
     author:  {
         name: string;
-        avatarUrl?: string;
+        avatarUrl?: string | null;
     };
 }
 
@@ -26,9 +27,9 @@ const Product: React.FC<ProductProps> = ({ title, price, description, specificat
             <div className={styles.content}>
                 <div className={styles.main}>
                     <h1 className={styles.title}>{title}</h1>
-                    {imagesUrl && <ProductSlider imagesUrl={imagesUrl} />}
-                    <div className={styles.description}>{description}</div>
-                    {specifications && (
+                    {imagesUrl && imagesUrl.length > 0 && <ProductSlider imagesUrl={imagesUrl} />}
+                    {description && <div className={styles.description}>{description}</div>}
+                    {specifications && Object.keys(specifications).length > 0 && (
                         <div className={styles.specifications}>
                             {Object.entries(specifications).map(([key, value]) => (
                                 <div className={styles.specificationItem} key={key}>
@@ -46,7 +47,18 @@ const Product: React.FC<ProductProps> = ({ title, price, description, specificat
                     <div className={styles.sellerBox}>
                         <div className={styles.sellerLabel}>Продавец:</div>
                         <Link href="/chat" className={styles.seller}>
-                            <div className={styles.sellerAvatar}></div>
+                            {author.avatarUrl ? (
+                                <Image
+                                    className={styles.sellerAvatar}
+                                    src={author.avatarUrl}
+                                    alt={`Аватар продавца ${author.name}`}
+                                    width={40}
+                                    height={40}
+                                    unoptimized
+                                />
+                            ) : (
+                                <div className={styles.sellerAvatar} />
+                            )}
                             <div className={styles.sellerName}>{author.name}</div>
                         </Link>
                     </div>

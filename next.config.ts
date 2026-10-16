@@ -22,6 +22,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       new URL('https://ir.ozone.ru/**'),
+      new URL('https://i.ibb.co/**'),
     ],
   },
 };
