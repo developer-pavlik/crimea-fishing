@@ -97,7 +97,7 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
             
             
             <div className={styles.productFormSubmitButton}>
-                <Button type="submit" disabled={loading}>
+                <Button view="positive" type="submit" disabled={loading}>
                     {initialData ? 'Сохранить изменения' : 'Добавить товар'}
                 </Button>
             </div>    

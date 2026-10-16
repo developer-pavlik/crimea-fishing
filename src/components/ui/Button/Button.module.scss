@@ -37,6 +37,19 @@
         }
     }
 
+    &_positive {
+        background: var(--positive-btn-color);
+        color: #FFFFFF;
+
+        &:hover {
+            background: var(--positive-btn-hover-color);
+        }
+
+        &:active {
+            background: var(--positive-btn-active-color);
+        }
+    }
+
 
     &_loading {
         .content {

@@ -36,7 +36,7 @@
     min-height: 44px;
     padding: 0 24px 0 12px;
     font-size: 16px;
-    background: #6ec16a;
+    background: var(--positive-btn-color);
     text-decoration: none;
     color: #fff;
     font-weight: 600;
@@ -44,11 +44,11 @@
     text-transform: uppercase;
 
     &:hover {
-        background: #5cb358 ;
+        background: var(--positive-btn-hover-color);
     }
 
     &_active {
-        background: #4b9b47;
+        background: var(--positive-btn-active-color);
     }
 }
 
