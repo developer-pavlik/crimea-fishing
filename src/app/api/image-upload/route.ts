@@ -1,6 +1,11 @@
+import { and, eq, gt } from "drizzle-orm";
+import { db } from "@/db";
+import { sessions } from "@/db/schema";
+import { getAccessSession } from "@/lib/auth";
+
 const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload';
 const MAX_IMAGE_SIZE = 32 * 1024 * 1024;
-const MAX_IMAGES_PER_REQUEST = 10;
+const MAX_IMAGES_PER_REQUEST = 20;
 
 interface ImgBBResponse {
 	success: boolean;
@@ -47,6 +52,25 @@ async function uploadImage(image: File, apiKey: string): Promise<ImageUploadResu
 }
 
 export async function POST(request: Request) {
+	const session = await getAccessSession();
+	if (!session) {
+		return Response.json({ error: 'Требуется авторизация' }, { status: 401 });
+	}
+
+	const [activeSession] = await db
+		.select({ id: sessions.id })
+		.from(sessions)
+		.where(and(
+			eq(sessions.id, session.sessionId),
+			eq(sessions.userId, session.userId),
+			gt(sessions.expiresAt, new Date()),
+		))
+		.limit(1);
+
+	if (!activeSession) {
+		return Response.json({ error: 'Требуется авторизация' }, { status: 401 });
+	}
+
 	const apiKey = process.env.IMGBB_API_KEY;
 
 	if (!apiKey) {
