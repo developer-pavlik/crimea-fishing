@@ -76,7 +76,7 @@ const Product: React.FC<ProductProps> = ({ id, title, price, description, specif
                         </Link>
                     </div>
                     <div className={styles.adminBox}>
-                        <Button view="secondary" className={styles.editButton}>
+                        <Button asLink href={`/product/${id}/edit`} view="secondary" className={styles.editButton}>
                             <EditIcon className={styles.editIcon} />
                             <span>Редактировать</span>
                         </Button>

@@ -14,6 +14,12 @@
     border-radius: 16px;
 }
 
+.productSpecificationsItems {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 .productSpecificationsItem {
     display: grid;
     grid-template-columns: 1fr 1fr 44px;
