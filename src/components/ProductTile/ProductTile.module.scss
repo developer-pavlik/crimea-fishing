@@ -19,6 +19,7 @@
     text-decoration: none;
     background: #ffffff;
     border-radius: 12px;
+    overflow: hidden;
 
     &:focus-visible {
         outline: 2px solid #0073ff;
@@ -31,7 +32,7 @@
     aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #eef2f5;
-    padding: 4px 4px 0;
+    border-bottom: 1px solid #eef2f5;
     
     &:hover {
         .sliderButtonNext,
