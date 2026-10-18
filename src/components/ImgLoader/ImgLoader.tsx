@@ -38,6 +38,7 @@ interface FileTypeError {
 }
 
 const MAX_IMAGES = 20;
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 
 const ImgLoader = ({ imagesUrl = [], onChange, onUploadingChange }: ImgLoaderProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -77,12 +78,12 @@ const ImgLoader = ({ imagesUrl = [], onChange, onUploadingChange }: ImgLoaderPro
         const selectedFiles = Array.from(event.currentTarget.files ?? []);
         event.currentTarget.value = '';
 
-        const files = selectedFiles.filter((file) => file.type.startsWith('image/'));
+        const files = selectedFiles.filter((file) => ACCEPTED_IMAGE_TYPES.includes(file.type));
 
         if (files.length < selectedFiles.length) {
             setFileTypeError({
                 id: crypto.randomUUID(),
-                message: 'Можно загружать только файлы изображений.',
+                message: 'Можно загружать только файлы JPG, JPEG, PNG или WEBP.',
             });
         }
 
@@ -223,7 +224,7 @@ const ImgLoader = ({ imagesUrl = [], onChange, onUploadingChange }: ImgLoaderPro
                 ))}
             </div>
             <input type="hidden" name="imgUrls" value={JSON.stringify(imagesUrl)} readOnly />
-            <input ref={fileInputRef} type="file" accept="image/*" multiple hidden onChange={handleFilesChange} />
+            <input ref={fileInputRef} type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" multiple hidden onChange={handleFilesChange} />
             <div className={styles.panel}>
                 <Button view='negative' type="button" onClick={handleClearImages}>Удалить все</Button>
                 <Button type="button" onClick={() => fileInputRef.current?.click()}>Добавить</Button>

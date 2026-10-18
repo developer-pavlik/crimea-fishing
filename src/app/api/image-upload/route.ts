@@ -6,6 +6,7 @@ import { getAccessSession } from "@/lib/auth";
 const IMGBB_UPLOAD_URL = 'https://api.imgbb.com/1/upload';
 const MAX_IMAGE_SIZE = 32 * 1024 * 1024;
 const MAX_IMAGES_PER_REQUEST = 20;
+const ACCEPTED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp']);
 
 interface ImgBBResponse {
 	success: boolean;
@@ -96,8 +97,8 @@ export async function POST(request: Request) {
 
 	const files = images as File[];
 
-	if (files.some((image) => !image.type.startsWith('image/'))) {
-		return Response.json({ error: 'Можно загружать только изображения' }, { status: 400 });
+	if (files.some((image) => !ACCEPTED_IMAGE_TYPES.has(image.type))) {
+		return Response.json({ error: 'Можно загружать только файлы JPG, JPEG, PNG или WEBP' }, { status: 400 });
 	}
 
 	if (files.some((image) => image.size > MAX_IMAGE_SIZE)) {
