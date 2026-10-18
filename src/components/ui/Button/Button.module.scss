@@ -64,6 +64,8 @@
 
     &_disabled {
         cursor: default;
+        opacity: 0.5;
+        pointer-events: none;
     }
 
     &_size-s {
@@ -75,8 +77,20 @@
 }
 
 .loader {
+    width: 24px;
+    height: 24px;
     position: absolute;
     left: 50%;
     top: 50%;
-    transform: translate(-50%, -50%);
+    
+    border: 3px solid currentColor; 
+    border-top: 3px solid transparent; 
+    border-radius: 50%;
+    box-sizing: border-box;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
