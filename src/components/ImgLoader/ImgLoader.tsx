@@ -9,6 +9,8 @@ import Image from 'next/image';
 
 interface ImgLoaderProps {
     imagesUrl?: string[];
+    onChange?: (imagesUrl: string[]) => void;
+    onUploadingChange?: (isUploading: boolean) => void;
 }
 
 type ImageStatus = 'loading' | 'loaded' | 'error';
@@ -35,12 +37,19 @@ interface FileTypeError {
     message: string;
 }
 
-const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
+const MAX_IMAGES = 20;
+
+const ImgLoader = ({ imagesUrl = [], onChange, onUploadingChange }: ImgLoaderProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const objectUrlsRef = useRef<string[]>([]);
+    const imagesUrlRef = useRef(imagesUrl);
+    const uploadingCountRef = useRef(0);
     const [uploadedImages, setUploadedImages] = useState<ImagePreview[]>([]);
-    const [removedInitialImageIds, setRemovedInitialImageIds] = useState<Set<string>>(() => new Set());
     const [fileTypeError, setFileTypeError] = useState<FileTypeError | null>(null);
+
+    useEffect(() => {
+        imagesUrlRef.current = imagesUrl;
+    }, [imagesUrl]);
 
     useEffect(() => () => {
         objectUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
@@ -52,6 +61,17 @@ const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
         const timeoutId = window.setTimeout(() => setFileTypeError(null), 7000);
         return () => window.clearTimeout(timeoutId);
     }, [fileTypeError]);
+
+    const updateUploadingState = (isUploading: boolean) => {
+        if (isUploading) {
+            uploadingCountRef.current += 1;
+            if (uploadingCountRef.current === 1) onUploadingChange?.(true);
+            return;
+        }
+
+        uploadingCountRef.current = Math.max(0, uploadingCountRef.current - 1);
+        if (uploadingCountRef.current === 0) onUploadingChange?.(false);
+    };
 
     const handleFilesChange = async (event: ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = Array.from(event.currentTarget.files ?? []);
@@ -66,9 +86,19 @@ const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
             });
         }
 
-        if (files.length === 0) return;
+        const availableSlots = Math.max(0, MAX_IMAGES - imagesUrl.length - uploadedImages.length);
+        const filesToUpload = files.slice(0, availableSlots);
 
-        const newImages = files.map((file) => {
+        if (filesToUpload.length < files.length) {
+            setFileTypeError({
+                id: crypto.randomUUID(),
+                message: `Можно добавить не более ${MAX_IMAGES} изображений.`,
+            });
+        }
+
+        if (filesToUpload.length === 0) return;
+
+        const newImages = filesToUpload.map((file) => {
             const previewUrl = URL.createObjectURL(file);
             objectUrlsRef.current.push(previewUrl);
 
@@ -80,6 +110,7 @@ const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
         });
 
         setUploadedImages((currentImages) => [...currentImages, ...newImages]);
+        updateUploadingState(true);
 
         const updateImageStatus = (
             id: string,
@@ -91,52 +122,66 @@ const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
             ));
         };
 
-        await Promise.all(files.map(async (file, index) => {
-            const imageId = newImages[index].id;
-            const formData = new FormData();
-            formData.append('images', file);
+        try {
+            await Promise.all(filesToUpload.map(async (file, index) => {
+                const imageId = newImages[index].id;
+                const formData = new FormData();
+                formData.append('images', file);
 
-            try {
-                const response = await fetch('/api/image-upload', {
-                    method: 'POST',
-                    body: formData,
-                });
-                const result = await response.json() as ImageUploadResponse;
-                const uploadResult = result.images?.[0];
+                try {
+                    const response = await fetch('/api/image-upload', {
+                        method: 'POST',
+                        body: formData,
+                    });
+                    const result = await response.json() as ImageUploadResponse;
+                    const uploadResult = result.images?.[0];
 
-                if (response.ok && uploadResult?.success) {
-                    updateImageStatus(imageId, 'loaded', { uploadedUrl: uploadResult.url });
-                } else {
-                    const error = uploadResult && !uploadResult.success
-                        ? uploadResult.error
-                        : result.error ?? `Ошибка загрузки: ${response.status}`;
-                    updateImageStatus(imageId, 'error', { error });
+                    if (response.ok && uploadResult?.success) {
+                        updateImageStatus(imageId, 'loaded', { uploadedUrl: uploadResult.url });
+                        const nextImages = [...imagesUrlRef.current, uploadResult.url]
+                            .filter((url, imageIndex, allUrls) => allUrls.indexOf(url) === imageIndex)
+                            .slice(0, MAX_IMAGES);
+                        imagesUrlRef.current = nextImages;
+                        onChange?.(nextImages);
+                    } else {
+                        const error = uploadResult && !uploadResult.success
+                            ? uploadResult.error
+                            : result.error ?? `Ошибка загрузки: ${response.status}`;
+                        updateImageStatus(imageId, 'error', { error });
+                    }
+                } catch {
+                    updateImageStatus(imageId, 'error', { error: 'Не удалось связаться с сервером загрузки' });
                 }
-            } catch {
-                updateImageStatus(imageId, 'error', { error: 'Не удалось связаться с сервером загрузки' });
-            }
-        }));
+            }));
+        } finally {
+            updateUploadingState(false);
+        }
     };
 
-    const handleDeleteImage = (imageId: string) => {
+    const handleDeleteImage = (imageId: string, imageUrl: string | undefined, currentImages: string[]) => {
         const uploadedImage = uploadedImages.find((image) => image.id === imageId);
 
         if (uploadedImage) {
             URL.revokeObjectURL(uploadedImage.previewUrl);
             setUploadedImages((currentImages) => currentImages.filter((image) => image.id !== imageId));
+            if (uploadedImage.uploadedUrl) {
+                const nextImages = currentImages.filter((url) => url !== uploadedImage.uploadedUrl);
+                onChange?.(nextImages);
+            }
             return;
         }
 
-        setRemovedInitialImageIds((currentIds) => new Set(currentIds).add(imageId));
+        if (imageUrl) {
+            const nextImages = currentImages.filter((url) => url !== imageUrl);
+            onChange?.(nextImages);
+        }
     };
 
     const handleClearImages = () => {
         uploadedImages.forEach((image) => URL.revokeObjectURL(image.previewUrl));
         setUploadedImages([]);
-        setRemovedInitialImageIds((currentIds) => new Set([
-            ...currentIds,
-            ...imagesUrl.map((previewUrl, index) => `initial-${index}-${previewUrl}`),
-        ]));
+        imagesUrlRef.current = [];
+        onChange?.([]);
     };
 
     const visibleImages = [
@@ -146,11 +191,8 @@ const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
             uploadedUrl: previewUrl,
             status: 'loaded' as const,
         })),
-        ...uploadedImages,
-    ].filter((image) => !removedInitialImageIds.has(image.id));
-    const imageUrls = visibleImages
-        .filter((image) => image.status === 'loaded' && image.uploadedUrl)
-        .map((image) => image.uploadedUrl);
+        ...uploadedImages.filter((image) => image.status !== 'loaded' || !image.uploadedUrl || !imagesUrl.includes(image.uploadedUrl)),
+    ];
 
     return (
         <div className={styles.imgLoader}>
@@ -163,7 +205,6 @@ const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
                         <div className={styles.preview}>
                             <Image className={styles.previewImg} src={image.previewUrl} fill alt={`Изображение товара ${index + 1}`} unoptimized={image.previewUrl.startsWith('blob:')} />
                             <div className={styles.imgStatus}>
-                                {/* <LoaderIcon className={styles.loader} /> */}
                                 {image.status === 'loading' ? (
                                     <LoaderIcon className={styles.loader} />
                                 ) : image.status === 'error' ? (
@@ -175,22 +216,21 @@ const ImgLoader = ({ imagesUrl = [] }: ImgLoaderProps) => {
                                 )}
                             </div>
                         </div>
-                        <button className={styles.deleteButton} type="button" aria-label={`Удалить изображение ${index + 1}`} onClick={() => handleDeleteImage(image.id)}>
+                        <button className={styles.deleteButton} type="button" aria-label={`Удалить изображение ${index + 1}`} onClick={() => handleDeleteImage(image.id, image.uploadedUrl, imagesUrl)}>
                             <DeleteIcon className={styles.deleteIcon} />
                         </button>
                     </div>
                 ))}
             </div>
-            <input type="hidden" name="imgUrls" value={JSON.stringify(imageUrls)} />
+            <input type="hidden" name="imgUrls" value={JSON.stringify(imagesUrl)} readOnly />
             <input ref={fileInputRef} type="file" accept="image/*" multiple hidden onChange={handleFilesChange} />
             <div className={styles.panel}>
                 <Button view='negative' type="button" onClick={handleClearImages}>Удалить все</Button>
                 <Button type="button" onClick={() => fileInputRef.current?.click()}>Добавить</Button>
             </div>
-            {/* Тут вывести сообщение об ошибке типа файла */}
             {fileTypeError && <div role="alert" className={styles.globalError}>{fileTypeError.message}</div>}
         </div>
     );
 };
 
-export default ImgLoader
+export default ImgLoader;

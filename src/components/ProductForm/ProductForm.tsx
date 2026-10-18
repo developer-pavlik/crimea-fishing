@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFieldArray, useForm, useWatch } from 'react-hook-form';
 import styles from './ProductForm.module.scss';
 import TextInput from '../ui/TextInput/TextInput';
@@ -26,6 +26,7 @@ function getErrorMessage(error: unknown) {
 }
 
 export default function ProductForm({ initialData, onSubmit = async () => {} }: ProductFormProps) {
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
   const {
     register,
     control,
@@ -49,6 +50,10 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
   const { fields, append, remove } = useFieldArray({ control, name: 'specifications' });
   const isFree = useWatch({ control, name: 'isFree' });
   const imagesUrl = useWatch({ control, name: 'imagesUrl' }) ?? [];
+
+  const handleImagesChange = (nextImagesUrl: string[]) => {
+    setValue('imagesUrl', nextImagesUrl, { shouldDirty: true, shouldValidate: true });
+  };
 
   useEffect(() => {
     if (!initialData) return;
@@ -91,7 +96,11 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
         <h2 className={styles.title}>{initialData ? 'Редактирование товара' : 'Добавление товара'}</h2>
       </div>
       <form onSubmit={handleSubmit(submit)} className={styles.productForm} noValidate>
-        <ImgLoader />
+        <ImgLoader
+          imagesUrl={imagesUrl}
+          onChange={handleImagesChange}
+          onUploadingChange={setIsUploadingImages}
+        />
         <div className={styles.productFormField}>
           <TextInput
             {...register('title', {
@@ -187,7 +196,7 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
         </div>
         {errors.root?.serverError && <div role="alert">{getErrorMessage(errors.root.serverError)}</div>}
         <div className={styles.productFormSubmitButton}>
-          <Button view="positive" type="submit" isLoading={isSubmitting}>
+          <Button view="positive" type="submit" isLoading={isSubmitting || isUploadingImages}>
             {initialData ? 'Сохранить изменения' : 'Добавить товар'}
           </Button>
         </div>
