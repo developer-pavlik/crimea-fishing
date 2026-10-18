@@ -38,8 +38,8 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
   } = useForm<ProductFormData>({
     defaultValues: {
       title: initialData?.title ?? '',
-      price: initialData?.price ?? 0,
-      isFree: (initialData?.price ?? 0) === 0,
+      price: initialData?.price,
+      isFree: initialData ? initialData.price === 0 : false,
       condition: initialData?.condition ?? 'new',
       description: initialData?.description ?? '',
       imagesUrl: initialData?.imagesUrl ?? [],
@@ -133,7 +133,7 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
               aria-invalid={Boolean(errors.price)}
             />
           </div>
-          <div className={styles.productFormField}>
+          <div className={styles.productFreeCheckbox}>
             <Checkbox {...register('isFree')} name="isFree" label="Отдам даром" />
           </div>
         </div>
