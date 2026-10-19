@@ -13,6 +13,7 @@ import ProductFavoritesButton from '@/components/ProductFavoriteButton/ProductFa
 
 import DeleteIcon from '../../../public/icons/delete.svg';
 import EditIcon from '../../../public/icons/edit.svg';
+import FreeIcon from '../../../public/icons/free.svg';
 import { formatPrice } from '@/lib/formatPrice';
 
 
@@ -98,8 +99,12 @@ const Product: React.FC<ProductProps> = ({ id, title, price, description, specif
                         </div>
                     )}
                 </div>
-                <div className={styles.sidebar}>
-                    <div className={styles.price}>{formatPrice(price)} ₽</div>
+                <div className={styles.sidebar}>      
+                    {price === 0 ? (
+                        <FreeIcon className={styles.freeIcon} aria-label="Бесплатно" role="img" />
+                    ) : (
+                        <div className={styles.price}>{formatPrice(price)} ₽</div>
+                    )}
                     <Button className={styles.buyButton}>Написать продавцу</Button>
                     <div className={styles.sellerBox}>
                         <div className={styles.sellerLabel}>Продавец:</div>

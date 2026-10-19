@@ -1,0 +1,39 @@
+<svg
+  viewBox="230 277 860 246"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <title id="tag-title">Ценник «ХАЛЯВА»</title>
+  <g>
+    <path
+      d="M440 284H1018Q1050 284 1050 308V492Q1050 516 1018 516H440Q423 516 409 508L285 417Q260 400 285 383L409 292Q423 284 440 284Z"
+      fill="#2FA866"
+      stroke="#17623C"
+      stroke-linejoin="round"
+      stroke-width="14"
+    />
+
+    <circle
+      cx="350"
+      cy="400"
+      r="30"
+      fill="#F7F0E3"
+      stroke="#17623C"
+      stroke-width="12"
+    />
+
+    <text
+      x="744"
+      y="476"
+      fill="#FFF8EA"
+      font-family="'Arial Black', 'Arial Narrow', Arial, sans-serif"
+      font-size="220"
+      font-weight="900"
+      letter-spacing="3"
+      lengthAdjust="spacingAndGlyphs"
+      text-anchor="middle"
+      textLength="550"
+    >
+      ХАЛЯВА
+    </text>
+  </g>
+</svg>
