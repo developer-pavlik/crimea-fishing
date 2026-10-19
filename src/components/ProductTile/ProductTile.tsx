@@ -18,6 +18,7 @@ import 'swiper/css/pagination';
 
 import PrevIcon from '../../../public/icons/prev.svg';
 import NextIcon from '../../../public/icons/next.svg';
+import FreeIcon from '../../../public/icons/free.svg';
 import { formatPrice } from '@/lib/formatPrice';
 
 export interface ProductTileProps {
@@ -99,7 +100,11 @@ const ProductTile = ({
                 </div>
                 <div className={styles.content}>
                     <h3 className={styles.title}>{title}</h3>
-                    <span className={styles.price}>{formatPrice(price)} ₽</span>
+                    {price === 0 ? (
+                        <FreeIcon className={styles.freeIcon} aria-label="Бесплатно" role="img" />
+                    ) : (
+                        <span className={styles.price}>{formatPrice(price)} ₽</span>
+                    )}
                 </div>
             </Link>
             <ProductTileMenu />
