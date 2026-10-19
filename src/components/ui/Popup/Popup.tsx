@@ -10,11 +10,21 @@ import cn from "clsx";
 import type { ReactNode } from "react";
 import styles from "./Popup.module.scss";
 
+export interface PopupClassNames {
+    popup?: string;
+    backdrop?: string;
+    header?: string;
+    title?: string;
+    content?: string;
+    closeButton?: string;
+}
+
 export interface PopupProps
     extends Omit<DialogProps, "children" | "className" | "title"> {
     children?: ReactNode;
     title?: ReactNode;
     className?: string;
+    classNames?: PopupClassNames;
     closeButtonLabel?: string;
 }
 
@@ -22,6 +32,7 @@ export const Popup = ({
     children,
     title,
     className,
+    classNames,
     closeButtonLabel = "Закрыть",
     backdrop,
     ...dialogProps
@@ -30,19 +41,27 @@ export const Popup = ({
         <Dialog
             {...dialogProps}
             modal
-            backdrop={backdrop ?? <div className={styles.backdrop} />}
-            className={cn(styles.popup, className)}
+            backdrop={
+                backdrop ?? (
+                    <div className={cn(styles.backdrop, classNames?.backdrop)} />
+                )
+            }
+            className={cn(styles.popup, className, classNames?.popup)}
         >
-            <div className={styles.header}>
-                {title && <DialogHeading className={styles.title}>{title}</DialogHeading>}
+            <div className={cn(styles.header, classNames?.header)}>
+                {title && (
+                    <DialogHeading className={cn(styles.title, classNames?.title)}>
+                        {title}
+                    </DialogHeading>
+                )}
                 <DialogDismiss
-                    className={styles.closeButton}
+                    className={cn(styles.closeButton, classNames?.closeButton)}
                     aria-label={closeButtonLabel}
                 >
                     <span aria-hidden="true">×</span>
                 </DialogDismiss>
             </div>
-            <div className={styles.content}>{children}</div>
+            <div className={cn(styles.content, classNames?.content)}>{children}</div>
         </Dialog>
     );
 };
