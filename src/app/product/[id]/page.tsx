@@ -59,6 +59,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             specifications={product.specifications}
             inFavorites={product.isFavorite}
             isAuthenticated={Boolean(session)}
+            canManage={product.canManage}
             author={product.author}
         />
     );

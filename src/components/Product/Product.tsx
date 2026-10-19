@@ -20,13 +20,14 @@ export interface ProductProps {
     specifications?: Record<string, string>;
     inFavorites: boolean;
     isAuthenticated: boolean;
+    canManage: boolean;
     author:  {
         name: string;
         avatarUrl?: string | null;
     };
 }
 
-const Product: React.FC<ProductProps> = ({ id, title, price, description, specifications, author, imagesUrl, inFavorites, isAuthenticated }) => {
+const Product: React.FC<ProductProps> = ({ id, title, price, description, specifications, author, imagesUrl, inFavorites, isAuthenticated, canManage }) => {
     return (
         <div className={styles.product}>
             <div className={styles.content}>
@@ -75,16 +76,18 @@ const Product: React.FC<ProductProps> = ({ id, title, price, description, specif
                             <div className={styles.sellerName}>{author.name}</div>
                         </Link>
                     </div>
-                    <div className={styles.adminBox}>
-                        <Button asLink href={`/product/${id}/edit`} view="secondary" className={styles.editButton}>
-                            <EditIcon className={styles.editIcon} />
-                            <span>Редактировать</span>
-                        </Button>
-                        <Button view="negative" className={styles.deleteButton}>
-                            <DeleteIcon className={styles.deleteIcon} />
-                            <span>Удалить</span>
-                        </Button>
-                    </div>
+                    {isAuthenticated && canManage && (
+                        <div className={styles.adminBox}>
+                            <Button asLink href={`/product/${id}/edit`} view="secondary" className={styles.editButton}>
+                                <EditIcon className={styles.editIcon} />
+                                <span>Редактировать</span>
+                            </Button>
+                            <Button view="negative" className={styles.deleteButton}>
+                                <DeleteIcon className={styles.deleteIcon} />
+                                <span>Удалить</span>
+                            </Button>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

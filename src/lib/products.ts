@@ -6,6 +6,7 @@ import { favorites, products, users } from "@/db/schema";
 import type { ProductPage } from "@/types/product-catalog";
 
 const PRODUCTS_PER_PAGE = 20;
+const PRODUCT_MANAGER_ROLES = new Set(["moderator", "admin", "superadmin"]);
 const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
@@ -56,6 +57,7 @@ export interface ProductDetails {
     description: string | null;
     specifications: Record<string, string>;
     isFavorite: boolean;
+    canManage: boolean;
     author: {
         name: string;
         avatarUrl: string | null;
@@ -92,6 +94,13 @@ export async function getProductById(
         : sql<boolean>`false`;
 
     try {
+        const [viewer] = userId
+            ? await db
+                  .select({ role: users.role })
+                  .from(users)
+                  .where(eq(users.id, userId))
+                  .limit(1)
+            : [undefined];
         const [row] = await db
             .select({
                 id: products.id,
@@ -101,6 +110,7 @@ export async function getProductById(
                 description: products.description,
                 specifications: products.specifications,
                 isFavorite: favoriteExpression,
+                sellerId: products.seller,
                 sellerName: users.username,
                 sellerAvatarUrl: users.photoUrl,
             })
@@ -121,6 +131,9 @@ export async function getProductById(
             description: row.description,
             specifications: normalizeSpecifications(row.specifications),
             isFavorite: row.isFavorite,
+            canManage:
+                userId === row.sellerId ||
+                PRODUCT_MANAGER_ROLES.has(viewer?.role ?? "user"),
             author: {
                 name: row.sellerName ?? "Пользователь",
                 avatarUrl: row.sellerAvatarUrl,
