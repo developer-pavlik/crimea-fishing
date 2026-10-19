@@ -20,12 +20,15 @@ import PrevIcon from '../../../public/icons/prev.svg';
 import NextIcon from '../../../public/icons/next.svg';
 import FreeIcon from '../../../public/icons/free.svg';
 import { formatPrice } from '@/lib/formatPrice';
+import type { ProductCondition } from '@/types/product-form';
+import ProductConditionLabel from '../ProductConditionLabel/ProductConditionLabel';
 
 export interface ProductTileProps {
     id: string;
     isFavorite: boolean;
     title: string;
     price: number;
+    condition: ProductCondition;
     imagesUrl: string[];
     className?: string;
 }
@@ -35,6 +38,7 @@ const ProductTile = ({
     isFavorite,
     title,
     price,
+    condition,
     imagesUrl,
     className,
     isAuthenticated,
@@ -107,6 +111,7 @@ const ProductTile = ({
                     )}
                 </div>
             </Link>
+            <ProductConditionLabel className={styles.conditionLabel} condition={condition} />
             <ProductTileMenu />
             {isAuthenticated && (
                 <ProductFavoriteButton

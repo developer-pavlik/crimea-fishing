@@ -4,6 +4,7 @@ import { and, desc, eq, lt, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { favorites, products, users } from "@/db/schema";
 import type { ProductPage } from "@/types/product-catalog";
+import type { ProductCondition } from "@/types/product-form";
 
 const PRODUCTS_PER_PAGE = 20;
 const PRODUCT_MANAGER_ROLES = new Set(["moderator", "admin", "superadmin"]);
@@ -53,6 +54,7 @@ export interface ProductDetails {
     id: string;
     title: string;
     price: number;
+    condition: ProductCondition;
     imagesUrl: string[];
     description: string | null;
     specifications: Record<string, string>;
@@ -106,6 +108,7 @@ export async function getProductById(
                 id: products.id,
                 title: products.title,
                 price: products.price,
+                condition: products.condition,
                 imagesUrl: products.imagesUrl,
                 description: products.description,
                 specifications: products.specifications,
@@ -127,6 +130,7 @@ export async function getProductById(
             id: row.id,
             title: row.title,
             price: row.price,
+            condition: row.condition,
             imagesUrl: row.imagesUrl,
             description: row.description,
             specifications: normalizeSpecifications(row.specifications),
@@ -261,6 +265,7 @@ export async function getProductPage(
             id: products.id,
             title: products.title,
             price: products.price,
+            condition: products.condition,
             imagesUrl: products.imagesUrl,
             cursorCreatedAt: sql<string>`to_char(
                 ${normalizedCreatedAt} at time zone 'UTC',
@@ -281,10 +286,11 @@ export async function getProductPage(
     const lastRow = pageRows.at(-1);
 
     return {
-        items: pageRows.map(({ id, title, price, imagesUrl, isFavorite }) => ({
+        items: pageRows.map(({ id, title, price, condition, imagesUrl, isFavorite }) => ({
             id,
             title,
             price,
+            condition,
             imagesUrl,
             isFavorite,
         })),

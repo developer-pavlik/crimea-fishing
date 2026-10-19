@@ -10,6 +10,8 @@ import { Button } from '@/components/ui/Button/Button'
 import Link from 'next/link'
 import ProductSlider from '@/components/ProductSlider/ProductSlider'
 import ProductFavoritesButton from '@/components/ProductFavoriteButton/ProductFavoriteButton'
+import ProductConditionLabel from '@/components/ProductConditionLabel/ProductConditionLabel'
+import type { ProductCondition } from '@/types/product-form'
 
 import DeleteIcon from '../../../public/icons/delete.svg';
 import EditIcon from '../../../public/icons/edit.svg';
@@ -21,6 +23,7 @@ export interface ProductProps {
     id: string;
     title: string;
     price: number;
+    condition: ProductCondition;
     imagesUrl?: string[];
     description?: string | null;
     specifications?: Record<string, string>;
@@ -33,7 +36,7 @@ export interface ProductProps {
     };
 }
 
-const Product: React.FC<ProductProps> = ({ id, title, price, description, specifications, author, imagesUrl, inFavorites, isAuthenticated, canManage }) => {
+const Product: React.FC<ProductProps> = ({ id, title, price, condition, description, specifications, author, imagesUrl, inFavorites, isAuthenticated, canManage }) => {
     const router = useRouter();
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -98,6 +101,7 @@ const Product: React.FC<ProductProps> = ({ id, title, price, description, specif
                             ))}
                         </div>
                     )}
+                    <p className={styles.conditionText}>Состояние: <ProductConditionLabel className={styles.conditionLabel} condition={condition} /></p>
                 </div>
                 <div className={styles.sidebar}>      
                     {price === 0 ? (

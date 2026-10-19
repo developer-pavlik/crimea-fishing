@@ -128,3 +128,11 @@
     height: auto;
     margin-top: auto;
 }
+
+.conditionLabel {
+    position: absolute;
+    left: 16px;
+    top: 16px;
+    z-index: 1;
+    pointer-events: none;
+}
