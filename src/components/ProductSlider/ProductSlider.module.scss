@@ -65,6 +65,10 @@
         background: var(--primary-btn-active-color);
     }
 
+    &[disabled] {
+        display: none;
+    }
+
 }
 
 .sliderButtonPrev {

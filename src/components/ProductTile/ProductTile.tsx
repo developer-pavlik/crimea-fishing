@@ -82,12 +82,16 @@ const ProductTile = ({
                                     ))
                                 }
                             </Swiper>
-                            <button className={styles.sliderButtonPrev} onClick={(event) => handleNavClick(event, 'prev')}>
-                                <PrevIcon className={styles.sliderButtonIcon} />
-                            </button>
-                            <button className={styles.sliderButtonNext} onClick={(event) => handleNavClick(event, 'next')}>
-                                <NextIcon className={styles.sliderButtonIcon} />
-                            </button>
+                            {imagesUrl.length > 1 && (
+                                <>
+                                    <button className={styles.sliderButtonPrev} onClick={(event) => handleNavClick(event, 'prev')}>
+                                        <PrevIcon className={styles.sliderButtonIcon} />
+                                    </button>
+                                    <button className={styles.sliderButtonNext} onClick={(event) => handleNavClick(event, 'next')}>
+                                        <NextIcon className={styles.sliderButtonIcon} />
+                                    </button>
+                                </>
+                            )}
                         </>
                     ) : (
                         <DefaultImgIcon className={styles.defaultImage} aria-hidden="true" />
