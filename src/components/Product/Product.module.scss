@@ -38,12 +38,41 @@
     color: var(--price-color);
 }
 
+@keyframes freeIconWiggle {
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    18% {
+        transform: rotate(3deg);
+    }
+
+    38% {
+        transform: rotate(-3deg);
+    }
+
+    58% {
+        transform: rotate(2deg);
+    }
+
+    78% {
+        transform: rotate(-2deg);
+    }
+}
+
 .freeIcon {
     display: block;
     width: 145px;
     margin-top: -4px;
-    transform: rotate(0deg);
     transform-origin: left center;
+    animation: freeIconWiggle 3.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .freeIcon {
+        animation: none;
+    }
 }
 
 .buyButton {
