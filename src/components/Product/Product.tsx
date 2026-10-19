@@ -1,5 +1,10 @@
-import React from 'react'
+"use client";
+
+import React, { useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { deleteProduct } from '@/actions/products'
+import PopupConfirmDeleteProduct from '@/components/PopupConfirmDeleteProduct/PopupConfirmDeleteProduct'
 import styles from './Product.module.scss'
 import { Button } from '@/components/ui/Button/Button'
 import Link from 'next/link'
@@ -28,6 +33,44 @@ export interface ProductProps {
 }
 
 const Product: React.FC<ProductProps> = ({ id, title, price, description, specifications, author, imagesUrl, inFavorites, isAuthenticated, canManage }) => {
+    const router = useRouter();
+    const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [deleteError, setDeleteError] = useState<string>();
+
+    const handleDelete = async () => {
+        if (isDeleting) return;
+
+        setIsDeleting(true);
+        setDeleteError(undefined);
+
+        try {
+            const result = await deleteProduct(id);
+            if (result.success) {
+                setIsDeletePopupOpen(false);
+                router.back();
+                return;
+            }
+
+            const errorMessages = {
+                unauthorized: "Требуется авторизация.",
+                invalid_input: "Некорректный товар.",
+                not_found: "Товар уже удалён или недоступен.",
+                server_error: "Не удалось удалить товар. Попробуйте ещё раз.",
+            } as const;
+            setDeleteError(errorMessages[result.error]);
+        } catch {
+            setDeleteError("Не удалось удалить товар. Попробуйте ещё раз.");
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    const openDeletePopup = () => {
+        setDeleteError(undefined);
+        setIsDeletePopupOpen(true);
+    };
+
     return (
         <div className={styles.product}>
             <div className={styles.content}>
@@ -82,10 +125,18 @@ const Product: React.FC<ProductProps> = ({ id, title, price, description, specif
                                 <EditIcon className={styles.editIcon} />
                                 <span>Редактировать</span>
                             </Button>
-                            <Button view="negative" className={styles.deleteButton}>
+                            <Button view="negative" className={styles.deleteButton} onClick={openDeletePopup}>
                                 <DeleteIcon className={styles.deleteIcon} />
                                 <span>Удалить</span>
                             </Button>
+                            <PopupConfirmDeleteProduct
+                                open={isDeletePopupOpen}
+                                setOpen={setIsDeletePopupOpen}
+                                productTitle={title}
+                                onConfirm={handleDelete}
+                                isLoading={isDeleting}
+                                error={deleteError}
+                            />
                         </div>
                     )}
                 </div>

@@ -3,7 +3,7 @@
 import { and, eq, gt } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
-import { products, sessions } from "@/db/schema";
+import { products, sessions, users } from "@/db/schema";
 import { getAccessSession } from "@/lib/auth";
 import type { ProductCondition } from "@/types/product-form";
 
@@ -127,6 +127,41 @@ export async function createProduct(data: ProductMutationData): Promise<ProductM
     return { success: true, id: product.id };
   } catch (error) {
     console.error("Failed to create product", error);
+    return { success: false, error: "server_error" };
+  }
+}
+
+export async function deleteProduct(productId: unknown): Promise<
+  | { success: true; id: string }
+  | { success: false; error: "unauthorized" | "invalid_input" | "not_found" | "server_error" }
+> {
+  if (typeof productId !== "string" || !UUID_PATTERN.test(productId)) {
+    return { success: false, error: "invalid_input" };
+  }
+
+  const session = await getAuthorizedSession();
+  if (!session) return { success: false, error: "unauthorized" };
+
+  try {
+    const [viewer] = await db
+      .select({ role: users.role })
+      .from(users)
+      .where(eq(users.id, session.userId))
+      .limit(1);
+
+    const canDeleteAnyProduct = ["moderator", "admin", "superadmin"].includes(viewer?.role ?? "");
+    const where = canDeleteAnyProduct
+      ? eq(products.id, productId)
+      : and(eq(products.id, productId), eq(products.seller, session.userId));
+    const [product] = await db.delete(products).where(where).returning({ id: products.id });
+
+    if (!product) return { success: false, error: "not_found" };
+
+    revalidatePath("/");
+    revalidatePath(`/product/${product.id}`);
+    return { success: true, id: product.id };
+  } catch (error) {
+    console.error("Failed to delete product", error);
     return { success: false, error: "server_error" };
   }
 }
