@@ -34,7 +34,7 @@ const Header = async () => {
                     </Link>
                     <SearchInput />
                     {session && (
-                        <Link className={styles.personalAccount} href="/">
+                        <Link className={styles.personalAccount} href="/profile">
                             {avatarUrl ? (
                                 <Image
                                     src={avatarUrl}
