@@ -3,7 +3,7 @@ import { getAccessSession } from "@/lib/auth";
 import Profile from "@/components/Profile/Profile";
 
 export const metadata = {
-  title: "Профиль | Рыбацкая барахолка",
+  title: "Профиль | Мои товары",
 };
 
 export default async function ProfilePage() {
