@@ -45,11 +45,15 @@ const ProfileInfo = ({ profile, isOwnProfile }: ProfileInfoProps) => {
                 </div>
             </div>
             <div className={styles.profileName}>{profileName}</div>
-            <div className={styles.location}>
-                <LocationIcon className={styles.locationIcon} />
-                <span>Севастополь</span>
-            </div>
-            <p className={styles.aboutMyself}>Рыбачу на стеньках, ловлю пеламидов и луфарев</p>
+            {profile.city?.trim() && (
+                <div className={styles.location}>
+                    <LocationIcon className={styles.locationIcon} />
+                    <span>{profile.city.trim()}</span>
+                </div>
+            )}
+            {profile.about?.trim() && (
+                <p className={styles.aboutMyself}>{profile.about.trim()}</p>
+            )}
             <div className={styles.menu}>
                 {isOwnProfile ? (
                     <ul className={styles.menuList}>

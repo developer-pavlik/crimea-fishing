@@ -11,6 +11,8 @@ export interface PublicUserProfile {
   id: string;
   username: string | null;
   photoUrl: string | null;
+  city: string | null;
+  about: string | null;
 }
 
 export function isUserId(value: string) {
@@ -29,6 +31,8 @@ export async function getPublicUserProfile(
       id: users.id,
       username: users.username,
       photoUrl: users.photoUrl,
+      city: users.city,
+      about: users.about,
     })
     .from(users)
     .where(eq(users.id, userId))

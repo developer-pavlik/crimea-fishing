@@ -30,6 +30,8 @@ export const users = pgTable(
     telegramId: bigint("telegram_id", { mode: "bigint" }),
     photoUrl: text("photo_url"),
     username: varchar("username", { length: 32 }),
+    city: text("city"),
+    about: text("about"),
     role: userRole("role").default("user").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
   },
