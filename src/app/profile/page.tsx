@@ -1,5 +1,6 @@
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getAccessSession } from "@/lib/auth";
+import { getPublicUserProfile } from "@/lib/users";
 import Profile from "@/components/Profile/Profile";
 
 export const metadata = {
@@ -13,5 +14,11 @@ export default async function ProfilePage() {
     redirect("/");
   }
 
-  return <Profile />;
+  const profile = await getPublicUserProfile(session.userId);
+
+  if (!profile) {
+    notFound();
+  }
+
+  return <Profile profile={profile} isOwnProfile />;
 }
