@@ -61,6 +61,7 @@ export interface ProductDetails {
     isFavorite: boolean;
     canManage: boolean;
     author: {
+        id: string;
         name: string;
         avatarUrl: string | null;
     };
@@ -139,6 +140,7 @@ export async function getProductById(
                 userId === row.sellerId ||
                 PRODUCT_MANAGER_ROLES.has(viewer?.role ?? "user"),
             author: {
+                id: row.sellerId,
                 name: row.sellerName ?? "Пользователь",
                 avatarUrl: row.sellerAvatarUrl,
             },

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Profile from "@/components/Profile/Profile";
+import { getAccessSession } from "@/lib/auth";
 import { getPublicUserProfile, isUserId } from "@/lib/users";
 
 export const metadata = {
@@ -17,11 +18,14 @@ export default async function UserPage({ params }: UserPageProps) {
     notFound();
   }
 
-  const profile = await getPublicUserProfile(id);
+  const [profile, session] = await Promise.all([
+    getPublicUserProfile(id),
+    getAccessSession(),
+  ]);
 
   if (!profile) {
     notFound();
   }
 
-  return <Profile profile={profile} isOwnProfile={false} />;
+  return <Profile profile={profile} isOwnProfile={session?.userId === profile.id} />;
 }

@@ -31,6 +31,7 @@ export interface ProductProps {
     isAuthenticated: boolean;
     canManage: boolean;
     author:  {
+        id: string;
         name: string;
         avatarUrl?: string | null;
     };
@@ -112,7 +113,7 @@ const Product: React.FC<ProductProps> = ({ id, title, price, condition, descript
                     <Button className={styles.buyButton}>Написать продавцу</Button>
                     <div className={styles.sellerBox}>
                         <div className={styles.sellerLabel}>Продавец:</div>
-                        <Link href="/chat" className={styles.seller}>
+                        <Link href={`/user/${author.id}`} className={styles.seller}>
                             {author.avatarUrl ? (
                                 <Image
                                     className={styles.sellerAvatar}
