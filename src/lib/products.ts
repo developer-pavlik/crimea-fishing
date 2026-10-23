@@ -59,6 +59,7 @@ export interface ProductDetails {
     description: string | null;
     specifications: Record<string, string>;
     isFavorite: boolean;
+    isOwner: boolean;
     canManage: boolean;
     author: {
         id: string;
@@ -136,6 +137,7 @@ export async function getProductById(
             description: row.description,
             specifications: normalizeSpecifications(row.specifications),
             isFavorite: row.isFavorite,
+            isOwner: userId === row.sellerId,
             canManage:
                 userId === row.sellerId ||
                 PRODUCT_MANAGER_ROLES.has(viewer?.role ?? "user"),

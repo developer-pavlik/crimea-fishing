@@ -29,6 +29,7 @@ export interface ProductProps {
     specifications?: Record<string, string>;
     inFavorites: boolean;
     isAuthenticated: boolean;
+    isOwner: boolean;
     canManage: boolean;
     author:  {
         id: string;
@@ -37,7 +38,7 @@ export interface ProductProps {
     };
 }
 
-const Product: React.FC<ProductProps> = ({ id, title, price, condition, description, specifications, author, imagesUrl, inFavorites, isAuthenticated, canManage }) => {
+const Product: React.FC<ProductProps> = ({ id, title, price, condition, description, specifications, author, imagesUrl, inFavorites, isAuthenticated, isOwner, canManage }) => {
     const router = useRouter();
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -110,7 +111,9 @@ const Product: React.FC<ProductProps> = ({ id, title, price, condition, descript
                     ) : (
                         <div className={styles.price}>{formatPrice(price)} ₽</div>
                     )}
-                    <Button className={styles.buyButton}>Написать продавцу</Button>
+                    {!isOwner && (
+                        <Button className={styles.buyButton}>Написать продавцу</Button>
+                    )}
                     <div className={styles.sellerBox}>
                         <div className={styles.sellerLabel}>Продавец:</div>
                         <Link href={`/user/${author.id}`} className={styles.seller}>

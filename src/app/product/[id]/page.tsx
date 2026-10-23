@@ -60,6 +60,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             specifications={product.specifications}
             inFavorites={product.isFavorite}
             isAuthenticated={Boolean(session)}
+            isOwner={product.isOwner}
             canManage={product.canManage}
             author={product.author}
         />
