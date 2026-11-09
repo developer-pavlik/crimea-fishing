@@ -157,6 +157,7 @@ interface ProductPageFilters {
     viewerId?: string;
     category?: ProductCategory;
     sellerId?: string;
+    favoritedBy?: string;
 }
 
 interface ProductPageOptions extends ProductPageFilters {
@@ -235,6 +236,7 @@ export async function getProductPage({
     viewerId,
     category,
     sellerId,
+    favoritedBy,
 }: ProductPageOptions): Promise<ProductPage> {
     const cursor = cursorValue === null ? null : decodeCursor(cursorValue);
     const normalizedCreatedAt = sql<Date>`coalesce(
@@ -271,7 +273,20 @@ export async function getProductPage({
     const sellerCondition = sellerId
         ? eq(products.seller, sellerId)
         : undefined;
-    const whereCondition = and(cursorCondition, categoryCondition, sellerCondition);
+    const favoriteOwnerCondition = favoritedBy
+        ? sql<boolean>`exists (
+              select 1
+              from ${favorites}
+              where ${favorites.userId} = ${favoritedBy}
+                and ${favorites.productId} = ${products.id}
+          )`
+        : undefined;
+    const whereCondition = and(
+        cursorCondition,
+        categoryCondition,
+        sellerCondition,
+        favoriteOwnerCondition,
+    );
 
     const rows = await db
         .select({
