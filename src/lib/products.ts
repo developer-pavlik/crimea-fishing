@@ -153,14 +153,23 @@ export async function getProductById(
 }
 
 
+interface ProductPageFilters {
+    viewerId?: string;
+    category?: ProductCategory;
+    sellerId?: string;
+}
+
+interface ProductPageOptions extends ProductPageFilters {
+    cursor: string | null;
+}
+
 export async function getInitialProductPage(
-    userId?: string,
-    category?: ProductCategory,
+    filters: ProductPageFilters = {},
 ): Promise<{ ok: true; page: ProductPage } | { ok: false }> {
     try {
         return {
             ok: true,
-            page: await getProductPage(null, userId, category),
+            page: await getProductPage({ ...filters, cursor: null }),
         };
     } catch (error) {
         if (!(error instanceof ProductQueryError)) {
@@ -221,11 +230,12 @@ function decodeCursor(value: string): ProductCursor {
     }
 }
 
-export async function getProductPage(
-    cursorValue: string | null,
-    userId?: string,
-    category?: ProductCategory,
-): Promise<ProductPage> {
+export async function getProductPage({
+    cursor: cursorValue,
+    viewerId,
+    category,
+    sellerId,
+}: ProductPageOptions): Promise<ProductPage> {
     const cursor = cursorValue === null ? null : decodeCursor(cursorValue);
     const normalizedCreatedAt = sql<Date>`coalesce(
         ${products.createdAt},
@@ -244,11 +254,11 @@ export async function getProductPage(
                   ),
               )
             : undefined;
-    const favoriteExpression = userId
+    const favoriteExpression = viewerId
         ? sql<boolean>`exists (
               select 1
               from ${favorites}
-              where ${favorites.userId} = ${userId}
+              where ${favorites.userId} = ${viewerId}
                 and ${favorites.productId} = ${products.id}
           )`
         : sql<boolean>`false`;
@@ -258,11 +268,10 @@ export async function getProductPage(
             : category
               ? eq(products.condition, category)
               : undefined;
-    const whereCondition = cursorCondition
-        ? categoryCondition
-            ? and(cursorCondition, categoryCondition)
-            : cursorCondition
-        : categoryCondition;
+    const sellerCondition = sellerId
+        ? eq(products.seller, sellerId)
+        : undefined;
+    const whereCondition = and(cursorCondition, categoryCondition, sellerCondition);
 
     const rows = await db
         .select({

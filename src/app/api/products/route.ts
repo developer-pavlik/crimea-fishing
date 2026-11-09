@@ -20,11 +20,11 @@ export async function GET(request: Request) {
     const session = await getAccessSession();
 
     try {
-        const page = await getProductPage(
+        const page = await getProductPage({
             cursor,
-            session?.userId,
-            categoryValue ?? undefined,
-        );
+            viewerId: session?.userId,
+            category: categoryValue ?? undefined,
+        });
         return Response.json(page);
     } catch (error) {
         if (error instanceof InvalidProductCursorError) {

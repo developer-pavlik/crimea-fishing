@@ -39,7 +39,10 @@ export default async function ProductTypePage({ params }: Props) {
   }
 
   const session = await getAccessSession();
-  const result = await getInitialProductPage(session?.userId, type);
+  const result = await getInitialProductPage({
+    viewerId: session?.userId,
+    category: type,
+  });
 
   if (!result.ok) {
     return <ProductCatalogError />;

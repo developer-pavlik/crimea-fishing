@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import cn from "clsx";
 import ProductTile from "../ProductTile/ProductTile";
 import type { ProductPage } from "@/types/product-catalog";
-import type { ProductCategory } from "@/lib/products";
 import styles from "./InfiniteProductGrid.module.scss";
 
 const MAX_AUTOMATIC_RETRIES = 3;
@@ -76,14 +75,14 @@ export interface InfiniteProductGridProps {
     className?: string;
     initialPage: ProductPage;
     isAuthenticated: boolean;
-    category?: ProductCategory;
+    productsUrl?: string;
 }
 
 export default function InfiniteProductGrid({
     className,
     initialPage,
     isAuthenticated,
-    category,
+    productsUrl = "/api/products",
 }: InfiniteProductGridProps) {
     const [items, setItems] = useState(initialPage.items);
     const [nextCursor, setNextCursor] = useState(initialPage.nextCursor);
@@ -140,17 +139,12 @@ export default function InfiniteProductGrid({
                 }, REQUEST_TIMEOUT_MS);
 
                 try {
-                    const searchParams = new URLSearchParams({
-                        cursor: nextCursor,
-                    });
-                    if (category) {
-                        searchParams.set("category", category);
-                    }
+                    const url = new URL(productsUrl, window.location.origin);
+                    url.searchParams.set("cursor", nextCursor);
 
-                    const response = await fetch(
-                        `/api/products?${searchParams.toString()}`,
-                        { signal: requestController.signal },
-                    );
+                    const response = await fetch(url, {
+                        signal: requestController.signal,
+                    });
                     let result: unknown;
 
                     try {
@@ -247,7 +241,7 @@ export default function InfiniteProductGrid({
                 setIsLoading(false);
             }
         }
-    }, [category, hasMore, nextCursor]);
+    }, [productsUrl, hasMore, nextCursor]);
 
     useEffect(() => {
         const sentinel = sentinelRef.current;

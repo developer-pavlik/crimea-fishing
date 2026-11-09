@@ -12,13 +12,17 @@ interface ProductCatalogProps {
 
 export default async function ProductCatalog(props: ProductCatalogProps) {
     const session = await getAccessSession();
+    const productsUrl = props.category
+        ? `/api/products?${new URLSearchParams({ category: props.category })}`
+        : "/api/products";
 
     return (
         <div className={styles.mainPage}>
             <ProductPanel />
             <InfiniteProductGrid
+                key={`${productsUrl}:${session?.userId ?? "guest"}`}
                 initialPage={props.initialPage}
-                category={props.category}
+                productsUrl={productsUrl}
                 isAuthenticated={Boolean(session)}
             />
         </div>

@@ -5,7 +5,7 @@ import { getInitialProductPage } from "@/lib/products";
 
 export default async function ProductsPage() {
     const session = await getAccessSession();
-    const result = await getInitialProductPage(session?.userId);
+    const result = await getInitialProductPage({ viewerId: session?.userId });
 
     if (!result.ok) {
         return <ProductCatalogError />;
