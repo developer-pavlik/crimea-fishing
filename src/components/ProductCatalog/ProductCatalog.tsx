@@ -1,5 +1,5 @@
 import styles from "./ProductCatalog.module.scss";
-import InfiniteProductGrid from "@/components/ProductGrid/InfiniteProductGrid";
+import InfiniteProductGrid from "@/components/InfiniteProductGrid/InfiniteProductGrid";
 import ProductPanel from "@/components/ProductPanel/ProductPanel";
 import type { ProductCategory } from "@/lib/products";
 import type { ProductPage } from "@/types/product-catalog";

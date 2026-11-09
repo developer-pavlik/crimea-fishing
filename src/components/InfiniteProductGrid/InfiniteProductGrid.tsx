@@ -5,7 +5,7 @@ import cn from "clsx";
 import ProductTile from "../ProductTile/ProductTile";
 import type { ProductPage } from "@/types/product-catalog";
 import type { ProductCategory } from "@/lib/products";
-import styles from "./ProductGrid.module.scss";
+import styles from "./InfiniteProductGrid.module.scss";
 
 const MAX_AUTOMATIC_RETRIES = 3;
 const REQUEST_TIMEOUT_MS = 1_000;
