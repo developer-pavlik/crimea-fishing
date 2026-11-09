@@ -16,6 +16,7 @@ import type { ProductCondition } from '@/types/product-form'
 import DeleteIcon from '../../../public/icons/delete.svg';
 import EditIcon from '../../../public/icons/edit.svg';
 import FreeIcon from '../../../public/icons/free.svg';
+import DefaultUserIcon from '../../../public/icons/fisherman.svg';
 import { formatPrice } from '@/lib/formatPrice';
 
 
@@ -127,7 +128,9 @@ const Product: React.FC<ProductProps> = ({ id, title, price, condition, descript
                                     unoptimized
                                 />
                             ) : (
-                                <div className={styles.sellerAvatar} />
+                                <div className={styles.sellerAvatar}>
+                                    <DefaultUserIcon className={styles.sellerDefaultIcon} />
+                                </div>
                             )}
                             <div className={styles.sellerName}>{author.name}</div>
                         </Link>

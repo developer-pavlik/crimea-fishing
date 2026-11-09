@@ -119,6 +119,7 @@
     border-radius: 50%;
     background-color: #ccc;
     object-fit: cover;
+    display: flex;
 }
 
 .sellerLabel {
@@ -166,4 +167,11 @@ span.conditionLabel {
 
 .conditionText {
     font-weight: 500;
+}
+
+.sellerDefaultIcon {
+    width: 80%;
+    height: 80%;
+    margin: auto;
+    color: var(--main-text-color);
 }
