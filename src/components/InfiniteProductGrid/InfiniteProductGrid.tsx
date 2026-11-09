@@ -87,6 +87,7 @@ export default function InfiniteProductGrid({
     const [items, setItems] = useState(initialPage.items);
     const [nextCursor, setNextCursor] = useState(initialPage.nextCursor);
     const [hasMore, setHasMore] = useState(initialPage.hasMore);
+    const [hasLoadedMore, setHasLoadedMore] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -182,6 +183,7 @@ export default function InfiniteProductGrid({
                     ]);
                     setNextCursor(result.nextCursor);
                     setHasMore(result.hasMore);
+                    setHasLoadedMore(true);
                     return;
                 } catch (loadError) {
                     if (
@@ -296,11 +298,11 @@ export default function InfiniteProductGrid({
                 <div className={styles.loadState} role="status">
                     Товаров пока нет.
                 </div>
-            ) : (
+            ) : hasLoadedMore ? (
                 <div className={styles.loadState} role="status">
                     Вы посмотрели все товары.
                 </div>
-            )}
+            ) : null}
         </>
     );
 }
