@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react';
 import styles from './ProfileInfo.module.scss'
 import DefaultUserIcon from '../../../public/icons/fisherman.svg';
 import LocationIcon from '../../../public/icons/location.svg';
@@ -10,6 +11,7 @@ import { usePathname } from 'next/navigation';
 import cn from 'clsx';
 import EditIcon from '../../../public/icons/edit.svg';
 import type { PublicUserProfile } from '@/lib/users';
+import PopupEditProfile from '@/components/PopupEditProfile/PopupEditProfile';
 
 const links = [
     { title: 'Мои обьявления', href: '/profile' },
@@ -23,6 +25,7 @@ type ProfileInfoProps = {
 
 const ProfileInfo = ({ profile, isOwnProfile }: ProfileInfoProps) => {
     const pathname = usePathname();
+    const [editOpen, setEditOpen] = useState(false);
     const avatarUrl = profile.photoUrl?.trim();
     const profileName = profile.username?.trim() || 'Пользователь';
 
@@ -77,9 +80,16 @@ const ProfileInfo = ({ profile, isOwnProfile }: ProfileInfoProps) => {
                 )}
             </div>
             {isOwnProfile && (
-                <button className={styles.editButton}>
+                <button className={styles.editButton} onClick={() => setEditOpen(true)}>
                     <EditIcon className={styles.editButtonIcon} />
                 </button>
+            )}
+            {isOwnProfile && (
+                <PopupEditProfile
+                    open={editOpen}
+                    setOpen={setEditOpen}
+                    profile={profile}
+                />
             )}
         </div>
     );

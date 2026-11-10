@@ -1,0 +1,31 @@
+.popup {
+  max-width: 480px;
+}
+
+.field {
+  margin-bottom: 16px;
+}
+
+.error {
+  margin-top: 8px;
+  color: #c62828;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+@media (max-width: 600px) {
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .actions button {
+    width: 100%;
+  }
+}

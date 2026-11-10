@@ -36,7 +36,6 @@ export const users = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
   },
   (table) => [
-    unique("users_username_key").on(table.username),
     unique("users_telegram_id_key").on(table.telegramId),
   ],
 );

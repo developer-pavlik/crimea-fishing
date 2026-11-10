@@ -15,6 +15,12 @@ export interface PublicUserProfile {
   about: string | null;
 }
 
+export interface UpdateUserProfileData {
+  username?: string;
+  city?: string | null;
+  about?: string | null;
+}
+
 export function isUserId(value: string) {
   return UUID_PATTERN.test(value);
 }
@@ -39,4 +45,27 @@ export async function getPublicUserProfile(
     .limit(1);
 
   return user ?? null;
+}
+
+export async function updateUserProfile(
+  userId: string,
+  data: UpdateUserProfileData,
+): Promise<PublicUserProfile | null> {
+  if (!isUserId(userId)) {
+    return null;
+  }
+
+  const [updated] = await db
+    .update(users)
+    .set(data)
+    .where(eq(users.id, userId))
+    .returning({
+      id: users.id,
+      username: users.username,
+      photoUrl: users.photoUrl,
+      city: users.city,
+      about: users.about,
+    });
+
+  return updated ?? null;
 }
