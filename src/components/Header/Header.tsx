@@ -7,7 +7,7 @@ import { db } from '@/db';
 import { users } from '@/db/schema';
 import { getAccessSession } from '@/lib/auth';
 import styles from './Header.module.scss';
-import SearchInput from '../ui/SearchInput/SearchInput';
+import Search from '../Search/Search';
 
 const Header = async () => {
     const session = await getAccessSession();
@@ -32,7 +32,7 @@ const Header = async () => {
                             priority
                         />
                     </Link>
-                    <SearchInput />
+                    <Search />
                     {session && (
                         <Link className={styles.personalAccount} href="/profile">
                             {avatarUrl ? (
