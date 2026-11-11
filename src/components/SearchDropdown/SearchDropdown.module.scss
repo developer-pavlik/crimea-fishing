@@ -42,3 +42,34 @@
 :global(body):has(.searchDropdown) {
     overflow: hidden;
 }
+
+.searchDropdownItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+
+    &_active {
+        background: #f5f5f5;
+    }
+}
+
+.searchDropdownText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.searchDropdownRemove {
+    flex-shrink: 0;
+    border: 0;
+    background: none;
+    color: #8a8f98;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--main-text-color);
+    }
+}

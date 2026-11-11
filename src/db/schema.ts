@@ -64,6 +64,14 @@ export const products = pgTable(
       sql`coalesce(${table.createdAt}, '1970-01-01 00:00:00+00'::timestamptz)`,
       table.id.desc(),
     ),
+    index("products_search_fts_idx").using(
+      "gin",
+      sql`to_tsvector('russian', ${table.title} || ' ' || coalesce(${table.description}, ''))`,
+    ),
+    index("products_title_trgm_idx").using(
+      "gin",
+      sql`lower(${table.title}) gin_trgm_ops`,
+    ),
   ],
 );
 
