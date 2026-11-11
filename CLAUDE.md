@@ -4,6 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 @AGENTS.md
 
+## Agent Execution
+
+- Do not use Git worktrees when spawning subagents or executing parallel tasks. Work directly in the current working directory.
+
 ## Project
 
 "Рыбацкая барахолка" (crimea-fishing): a Russian-language marketplace for fishing tackle. Next.js 16 App Router, React 19, TypeScript, PostgreSQL via Drizzle ORM, SCSS modules. All user-facing strings and error messages are in Russian.
