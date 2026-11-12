@@ -6,9 +6,9 @@ import { favorites, products, users } from "@/db/schema";
 import type { ProductPage } from "@/types/product-catalog";
 import type { ProductCondition } from "@/types/product-form";
 
-const PRODUCTS_PER_PAGE = 20;
+export const PRODUCTS_PER_PAGE = 20;
 const PRODUCT_MANAGER_ROLES = new Set(["moderator", "admin", "superadmin"]);
-const UUID_PATTERN =
+export const UUID_PATTERN =
     /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export function isProductId(value: string) {
@@ -26,7 +26,7 @@ export function isProductCategory(value: string): value is ProductCategory {
     return value === "free" || value === "new" || value === "used";
 }
 
-const CURSOR_TIMESTAMP_PATTERN =
+export const CURSOR_TIMESTAMP_PATTERN =
     /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}Z$/;
 
 export class InvalidProductCursorError extends Error {

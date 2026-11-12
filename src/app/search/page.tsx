@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { countSearchProducts, normalizeSearchQuery } from "@/lib/search";
+import { getAccessSession } from "@/lib/auth";
+import {
+    countSearchProducts,
+    getInitialSearchProductPage,
+    normalizeSearchQuery,
+    parseSearchSort,
+} from "@/lib/search";
+import type { ProductPage } from "@/types/product-catalog";
 import { pluralizeRu } from "@/lib/pluralize";
 import SearchResults from "@/components/SearchResults/SearchResults";
 
@@ -26,11 +33,32 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         );
     }
 
+    const sort = parseSearchSort((await searchParams).sort);
+    const session = await getAccessSession();
     let count: number;
+    let initialPage: ProductPage | null = null;
 
     try {
-        count = await countSearchProducts(query);
+        const [countResult, pageResult] = await Promise.all([
+            countSearchProducts(query),
+            getInitialSearchProductPage({
+                query,
+                sort,
+                viewerId: session?.userId,
+            }),
+        ]);
+        count = countResult;
+        initialPage = pageResult.ok ? pageResult.page : null;
     } catch {
+        return (
+            <section role="alert">
+                <h1>Не удалось выполнить поиск</h1>
+                <p>Попробуйте повторить запрос позже.</p>
+            </section>
+        );
+    }
+
+    if (!initialPage) {
         return (
             <section role="alert">
                 <h1>Не удалось выполнить поиск</h1>
@@ -47,7 +75,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                     запросу «{query}»
                 </h1>
             </section>
-            <SearchResults />
+            <SearchResults
+                initialPage={initialPage}
+                query={query}
+                sort={sort}
+                isAuthenticated={!!session}
+            />
         </>
     );
 }
