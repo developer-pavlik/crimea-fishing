@@ -17,7 +17,7 @@
 .searchFiltersContent {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 20px;
 }
 
 .searchFiltersSection {
@@ -61,7 +61,8 @@
 .searchFiltersItem {
     display: grid;
 
-    &_price {
+    &_price,
+    &_condition {
         gap: 12px;
     }
 }

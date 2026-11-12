@@ -11,6 +11,9 @@ interface SearchFiltersForm {
     priceFrom: string;
     priceTo: string;
     onlyFree: boolean;
+    conditionNew: boolean;
+    conditionUsed: boolean;
+    onlyWithPhoto: boolean;
 }
 
 const validatePrice = (value: string) => {
@@ -32,7 +35,7 @@ const SearchFilters = () => {
         formState: { errors },
     } = useForm<SearchFiltersForm>({
         mode: 'onChange',
-        defaultValues: { priceFrom: '', priceTo: '', onlyFree: false },
+        defaultValues: { priceFrom: '', priceTo: '', onlyFree: false, conditionNew: false, conditionUsed: false, onlyWithPhoto: false },
     });
 
     const onlyFree = useWatch({ control, name: 'onlyFree' });
@@ -103,6 +106,19 @@ const SearchFilters = () => {
                             checked={onlyFree}
                             onChange={(e) => handleOnlyFreeChange(e.target.checked)}
                         />
+                    </div>
+                </div>
+                <div className={styles.searchFiltersSection}>
+                    <div className={styles.searchFiltersLabel}>Состояние</div>
+                    <div className={cn(styles.searchFiltersItem, styles.searchFiltersItem_condition)}>
+                        <Checkbox label="Новый" {...register('conditionNew')} />
+                        <Checkbox label="Б/у" {...register('conditionUsed')} />
+                    </div>
+                </div>
+                <div className={styles.searchFiltersSection}>
+                    <div className={styles.searchFiltersLabel}>Наличие фото</div>
+                    <div className={cn(styles.searchFiltersItem)}>
+                        <Checkbox label="Только с фото" {...register('onlyWithPhoto')} />
                     </div>
                 </div>
             </div>
