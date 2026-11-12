@@ -1,7 +1,7 @@
 .searchFilters {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 24px;
     padding: 16px;
     border-radius: 16px;
     background: #fff;
@@ -12,4 +12,56 @@
     font-size: 16px;
     font-weight: 600;
     margin: 0;
+}
+
+.searchFiltersContent {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.searchFiltersSection {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.searchFiltersLabel {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.searchFiltersPriceRange {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.searchFiltersPriceInput {
+    flex: 1;
+    min-width: 0;
+
+    input {
+        width: 100%;
+        -moz-appearance: textfield;
+        appearance: textfield;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+}
+
+.searchFiltersPriceDash {
+    color: #8a8f98;
+}
+
+.searchFiltersItem {
+    display: grid;
+
+    &_price {
+        gap: 12px;
+    }
 }
