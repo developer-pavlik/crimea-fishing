@@ -1,6 +1,6 @@
 import "server-only";
 
-import { and, sql, type SQL } from "drizzle-orm";
+import { and, eq, gte, lte, sql, type SQL } from "drizzle-orm";
 import { db } from "@/db";
 import { favorites, products } from "@/db/schema";
 import {
@@ -9,6 +9,7 @@ import {
     PRODUCTS_PER_PAGE,
     UUID_PATTERN,
 } from "@/lib/products";
+import type { SearchFilters } from "@/lib/search-filters";
 import type { ProductPage } from "@/types/product-catalog";
 
 export const SEARCH_QUERY_MAX_LENGTH = 100;
@@ -48,12 +49,38 @@ export function buildProductSearchCondition(query: string): SQL {
     )`;
 }
 
-export async function countSearchProducts(query: string) {
+export function buildProductFiltersCondition(
+    filters: SearchFilters,
+): SQL | undefined {
+    return and(
+        filters.onlyFree ? eq(products.price, 0) : undefined,
+        filters.priceFrom !== null
+            ? gte(products.price, filters.priceFrom)
+            : undefined,
+        filters.priceTo !== null ? lte(products.price, filters.priceTo) : undefined,
+        filters.condition !== "any"
+            ? eq(products.condition, filters.condition)
+            : undefined,
+        filters.onlyWithPhoto
+            ? sql`cardinality(${products.imagesUrl}) > 0`
+            : undefined,
+    );
+}
+
+export async function countSearchProducts(
+    query: string,
+    filters: SearchFilters,
+) {
     try {
         const [row] = await db
             .select({ count: sql<number>`count(*)::int` })
             .from(products)
-            .where(buildProductSearchCondition(query));
+            .where(
+                and(
+                    buildProductSearchCondition(query),
+                    buildProductFiltersCondition(filters),
+                ),
+            );
 
         return row?.count ?? 0;
     } catch (error) {
@@ -143,6 +170,7 @@ function decodeSearchCursor(value: string, sort: SearchSort): SearchCursor {
 interface SearchPageOptions {
     query: string;
     sort: SearchSort;
+    filters: SearchFilters;
     cursor: string | null;
     viewerId?: string;
 }
@@ -150,6 +178,7 @@ interface SearchPageOptions {
 export async function getSearchProductPage({
     query,
     sort,
+    filters,
     cursor: cursorValue,
     viewerId,
 }: SearchPageOptions): Promise<ProductPage> {
@@ -224,7 +253,13 @@ export async function getSearchProductPage({
                 isFavorite: favoriteExpression,
             })
             .from(products)
-            .where(and(buildProductSearchCondition(query), cursorCondition))
+            .where(
+                and(
+                    buildProductSearchCondition(query),
+                    buildProductFiltersCondition(filters),
+                    cursorCondition,
+                ),
+            )
             .orderBy(...orderBy)
             .limit(PRODUCTS_PER_PAGE + 1);
 

@@ -6,9 +6,11 @@ import {
     normalizeSearchQuery,
     parseSearchSort,
 } from "@/lib/search";
+import { parseSearchFilters } from "@/lib/search-filters";
 import type { ProductPage } from "@/types/product-catalog";
 import { pluralizeRu } from "@/lib/pluralize";
 import SearchResults from "@/components/SearchResults/SearchResults";
+import styles from '@/components/SearchResults/SearchResults.module.scss';
 
 interface SearchPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -33,17 +35,20 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         );
     }
 
-    const sort = parseSearchSort((await searchParams).sort);
+    const params = await searchParams;
+    const sort = parseSearchSort(params.sort);
+    const filters = parseSearchFilters((key) => params[key]);
     const session = await getAccessSession();
     let count: number;
     let initialPage: ProductPage | null = null;
 
     try {
         const [countResult, pageResult] = await Promise.all([
-            countSearchProducts(query),
+            countSearchProducts(query, filters),
             getInitialSearchProductPage({
                 query,
                 sort,
+                filters,
                 viewerId: session?.userId,
             }),
         ]);
@@ -51,7 +56,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         initialPage = pageResult.ok ? pageResult.page : null;
     } catch {
         return (
-            <section role="alert">
+            <section className={styles.searchAlert} role="alert">
                 <h1>Не удалось выполнить поиск</h1>
                 <p>Попробуйте повторить запрос позже.</p>
             </section>
@@ -60,7 +65,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
     if (!initialPage) {
         return (
-            <section role="alert">
+            <section className={styles.searchAlert} role="alert">
                 <h1>Не удалось выполнить поиск</h1>
                 <p>Попробуйте повторить запрос позже.</p>
             </section>
@@ -70,7 +75,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     return (
         <>
             <section>
-                <h1>
+                <h1 className={styles.searchResultsTitle}>
                     Найдено {count} {pluralizeRu(count, ["товар", "товара", "товаров"])} по
                     запросу «{query}»
                 </h1>
@@ -79,6 +84,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 initialPage={initialPage}
                 query={query}
                 sort={sort}
+                filters={filters}
                 isAuthenticated={!!session}
             />
         </>

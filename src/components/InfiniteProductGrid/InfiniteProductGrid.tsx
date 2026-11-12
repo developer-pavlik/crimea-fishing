@@ -296,7 +296,7 @@ export default function InfiniteProductGrid({
                 />
             ) : items.length === 0 ? (
                 <div className={styles.loadState} role="status">
-                    Товаров пока нет.
+                    Таких товаров пока нет.
                 </div>
             ) : hasLoadedMore ? (
                 <div className={styles.loadState} role="status">

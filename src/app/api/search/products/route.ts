@@ -5,6 +5,7 @@ import {
     normalizeSearchQuery,
     parseSearchSort,
 } from "@/lib/search";
+import { parseSearchFilters } from "@/lib/search-filters";
 
 export async function GET(request: Request) {
     const searchParams = new URL(request.url).searchParams;
@@ -23,6 +24,7 @@ export async function GET(request: Request) {
         const page = await getSearchProductPage({
             query,
             sort: parseSearchSort(searchParams.get("sort")),
+            filters: parseSearchFilters((key) => searchParams.get(key)),
             cursor: searchParams.get("cursor"),
             viewerId: session?.userId,
         });
