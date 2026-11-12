@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { countSearchProducts, normalizeSearchQuery } from "@/lib/search";
 import { pluralizeRu } from "@/lib/pluralize";
+import SearchResults from "@/components/SearchResults/SearchResults";
 
 interface SearchPageProps {
     searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -39,11 +40,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     }
 
     return (
-        <section>
-            <h1>
-                Найдено {count} {pluralizeRu(count, ["товар", "товара", "товаров"])} по
-                запросу «{query}»
-            </h1>
-        </section>
+        <>
+            <section>
+                <h1>
+                    Найдено {count} {pluralizeRu(count, ["товар", "товара", "товаров"])} по
+                    запросу «{query}»
+                </h1>
+            </section>
+            <SearchResults />
+        </>
     );
 }

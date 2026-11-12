@@ -1,0 +1,22 @@
+.searchResults {
+    grid-template-columns: 320px 1fr;
+    gap: 12px;
+    display: grid;
+    position: relative;
+    margin-top: 24px;
+}
+
+.sortSelectField {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.sortSelect {
+    width: 220px;
+}
+
+.content {
+    display: grid;
+    gap: 24px;
+}

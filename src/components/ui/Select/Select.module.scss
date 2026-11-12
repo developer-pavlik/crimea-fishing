@@ -1,0 +1,116 @@
+.field {
+    width: 100%;
+}
+
+.label {
+    display: block;
+    color: #23262B;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 44px;
+    padding: 0 16px;
+    border: 1px solid rgba(35, 38, 43, 0.2);
+    border-radius: 8px;
+    background: #fff;
+    color: #23262B;
+    font: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+
+    &:focus-visible,
+    &[aria-expanded="true"] {
+        outline: 1px solid #0073FF;
+        box-shadow: 0 0 4px 0 rgba(0, 115, 255, 0.5);
+    }
+
+    &:disabled,
+    &[aria-disabled="true"] {
+        cursor: not-allowed;
+        border-color: rgba(35, 38, 43, 0.2);
+        background: rgba(35, 38, 43, 0.08);
+        color: rgba(35, 38, 43, 0.2);
+    }
+
+    &_error {
+        border: 1px solid #FF4D4D;
+    }
+}
+
+.value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.placeholder {
+    color: rgba(35, 38, 43, 0.6);
+}
+
+.arrow {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+}
+
+.popover {
+    z-index: 1002;
+    box-sizing: border-box;
+    max-height: min(320px, var(--popover-available-height, 320px));
+    overflow: auto;
+    padding: 4px;
+    border: 1px solid rgba(35, 38, 43, 0.12);
+    border-radius: 8px;
+    background: #fff;
+    color: #23262B;
+    box-shadow: 0 18px 48px rgba(15, 18, 24, 0.2);
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    scroll-margin: 4px;
+
+    &[data-active-item] {
+        background: rgba(35, 38, 43, 0.08);
+    }
+
+    &[aria-selected="true"] {
+        color: #0073FF;
+    }
+
+    &[aria-disabled="true"] {
+        cursor: not-allowed;
+        color: rgba(35, 38, 43, 0.2);
+    }
+}
+
+.itemLabel {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.check {
+    flex: 0 0 auto;
+    width: 16px;
+    height: 16px;
+}
