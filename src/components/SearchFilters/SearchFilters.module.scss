@@ -1,0 +1,15 @@
+.searchFilters {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    border-radius: 16px;
+    background: #fff;
+    color: var(--main-text-color);
+}
+
+.searchFiltersTitle {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}

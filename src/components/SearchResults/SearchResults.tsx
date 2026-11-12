@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import InfiniteProductGrid from '@/components/InfiniteProductGrid/InfiniteProductGrid';
+import SearchFilters from '@/components/SearchFilters/SearchFilters';
 import Select from '@/components/ui/Select/Select';
 import type { ProductPage } from '@/types/product-catalog';
 import styles from './SearchResults.module.scss';
@@ -51,7 +52,9 @@ const SearchResults = ({
 
     return (
         <div className={styles.searchResults}>
-            <div className={styles.sidebar}>Тут будут фильтры</div>
+            <div className={styles.sidebar}>
+                <SearchFilters />
+            </div>
             <div className={styles.content} aria-busy={isPending}>
                 <Select
                     label="Сортировка"
