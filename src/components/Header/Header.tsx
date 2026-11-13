@@ -8,6 +8,7 @@ import { users } from '@/db/schema';
 import { getAccessSession } from '@/lib/auth';
 import styles from './Header.module.scss';
 import Search from '../Search/Search';
+import ProductCategoriesMenu from '../ProductCategoriesMenu/ProductCategoriesMenu';
 
 const Header = async () => {
     const session = await getAccessSession();
@@ -32,6 +33,7 @@ const Header = async () => {
                             priority
                         />
                     </Link>
+                    <ProductCategoriesMenu />
                     <Search />
                     {session && (
                         <Link className={styles.personalAccount} href="/profile">
