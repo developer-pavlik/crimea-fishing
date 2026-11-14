@@ -30,16 +30,71 @@
     background: #fff;
     width: 100%;
     border-radius: 24px;
+    overflow: hidden;
 }
 
 .menuList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     list-style: none;
-    padding: 0;
+    padding: 1px 0 0 1px ;
     margin: 0;
+
+}
+
+.menuItem {
+    border: 1px solid #e5e7eb;
+    margin-top: -1px;
+    margin-left: -1px;
 }
 
 .menuLink {
+    display: flex;
+    gap: 12px;
+    padding: 12px 16px;
     text-decoration: none;
     color: #000;
     font-weight: 600;
+    height: 100%;
+    box-sizing: border-box;
+
+    &:hover,
+    &:focus-visible {
+        background: #f0f0f0;
+    }
+
+    &:focus-visible {
+        outline: none;
+    }
+}
+
+.iconWrapper {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: #f0f0f0;
+    border-radius: 8px;
+}
+
+.description {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.subText {
+    font-size: 12px;
+    color: #666;
+}
+
+.dropdown {
+    display: none;
+
+    &_open {
+        display: block;
+    }
+}
+
+:global(body):has(.dropdown_open) {
+    overflow: hidden;
 }

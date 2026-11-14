@@ -1,27 +1,29 @@
 import styles from './ProductCategoriesMenu.module.scss'
-import { Button } from "@/components/ui/Button/Button";
-import MenuIcon from '../../../public/icons/category.svg';
+import Link from "next/link";
+import { getMenuCategories } from "@/lib/categories";
+import ProductCategoriesMenuToggle from "./ProductCategoriesMenuToggle";
 
-const ProductCategoriesMenu = () => {
+const ProductCategoriesMenu = async () => {
+    const items = await getMenuCategories();
+
     return (
-        <div className={styles.productCategoriesMenu}>
-            <Button className={styles.button} type="button" view="primary">
-                <span>Каталог</span>
-                <MenuIcon className={styles.menuIcon} />
-            </Button>
-
-            <div className={styles.dropdown}>
-                <div className={styles.backdrop} />
-
-                <div className={styles.menu}>
-                    <ul className={styles.menuList}>
-                        <li className={styles.menuItem}>
-                            <a className={styles.menuLink} href="#">Категория 1</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <ProductCategoriesMenuToggle>
+            <ul className={styles.menuList}>
+                {items.map((category) => (
+                    <li key={category.id} className={styles.menuItem}>
+                        <Link className={styles.menuLink} href={`/catalog/${category.slug}`}>
+                            <div className={styles.iconWrapper}></div>
+                            <div className={styles.description}>
+                                <span className={styles.title}>{category.name}</span>
+                                {category.description && (
+                                    <span className={styles.subText}>{category.description}</span>
+                                )}
+                            </div>
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        </ProductCategoriesMenuToggle>
     )
 }
 
