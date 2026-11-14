@@ -16,10 +16,7 @@ const ProductCategoriesMenu = () => {
                 <div className={styles.menu}>
                     <ul className={styles.menuList}>
                         <li className={styles.menuItem}>
-                            <a href="#">Категория 1</a>
-                        </li>
-                        <li className={styles.menuItem}>
-                            <a href="#">Категория 2</a>
+                            <a className={styles.menuLink} href="#">Категория 1</a>
                         </li>
                     </ul>
                 </div>

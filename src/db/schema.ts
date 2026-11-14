@@ -47,6 +47,7 @@ export const categories = pgTable(
     name: varchar("name", { length: 255 }).notNull(),
     slug: varchar("slug", { length: 255 }),
     icon: text("icon"),
+    description: varchar("description", { length: 150 }),
     parentId: uuid("parent_id"),
   },
   (table) => [
