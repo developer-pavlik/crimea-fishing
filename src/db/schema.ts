@@ -45,9 +45,12 @@ export const categories = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey().notNull(),
     name: varchar("name", { length: 255 }).notNull(),
+    slug: varchar("slug", { length: 255 }),
+    icon: text("icon"),
     parentId: uuid("parent_id"),
   },
   (table) => [
+    unique("categories_slug_key").on(table.slug),
     foreignKey({
       name: "fk_category_parent",
       columns: [table.parentId],
