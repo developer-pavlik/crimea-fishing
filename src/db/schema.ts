@@ -40,6 +40,23 @@ export const users = pgTable(
   ],
 );
 
+export const categories = pgTable(
+  "categories",
+  {
+    id: uuid("id").defaultRandom().primaryKey().notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
+    parentId: uuid("parent_id"),
+  },
+  (table) => [
+    foreignKey({
+      name: "fk_category_parent",
+      columns: [table.parentId],
+      foreignColumns: [table.id],
+    }).onDelete("cascade"),
+    index("categories_parent_id_idx").on(table.parentId),
+  ],
+);
+
 export const products = pgTable(
   "products",
   {
@@ -51,6 +68,7 @@ export const products = pgTable(
     description: text("description"),
     specifications: jsonb("specifications").default({}).notNull(),
     seller: uuid("seller").notNull(),
+    categoryId: uuid("category_id"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
     updatedAt: timestamp("updated_at", { withTimezone: true, mode: "date" }).defaultNow(),
   },
@@ -60,6 +78,12 @@ export const products = pgTable(
       columns: [table.seller],
       foreignColumns: [users.id],
     }).onDelete("cascade"),
+    foreignKey({
+      name: "fk_product_category",
+      columns: [table.categoryId],
+      foreignColumns: [categories.id],
+    }).onDelete("set null"),
+    index("products_category_id_idx").on(table.categoryId),
     index("products_created_at_id_idx").on(
       sql`coalesce(${table.createdAt}, '1970-01-01 00:00:00+00'::timestamptz)`,
       table.id.desc(),
