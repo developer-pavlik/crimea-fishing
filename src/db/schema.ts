@@ -71,6 +71,10 @@ export const products = pgTable(
     imagesUrl: text("images_url").array().default([]).notNull(),
     description: text("description"),
     specifications: jsonb("specifications").default({}).notNull(),
+    deliveryMethods: jsonb("delivery_methods")
+      .$type<{ pickup: boolean; carrier: boolean }>()
+      .default({ pickup: true, carrier: false })
+      .notNull(),
     seller: uuid("seller").notNull(),
     categoryId: uuid("category_id"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).defaultNow(),
