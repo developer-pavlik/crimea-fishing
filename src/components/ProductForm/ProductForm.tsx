@@ -9,6 +9,7 @@ import { Button } from '../ui/Button/Button';
 import ImgLoader from '../ImgLoader/ImgLoader';
 import Checkbox from '../ui/Checkbox/Checkbox';
 import Radio from '../ui/Radio/Radio';
+import Switch from '../ui/Switch/Switch';
 import DeleteIcon from '../../../public/icons/delete.svg';
 import PickupIcon from '../../../public/icons/pickup.svg';
 import TransportIcon from '../../../public/icons/transport.svg';
@@ -43,6 +44,7 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
       price: initialData?.price,
       isFree: initialData ? initialData.price === 0 : false,
       condition: initialData?.condition ?? 'new',
+      deliveryMethods: initialData?.deliveryMethods ?? { pickup: true, carrier: false },
       description: initialData?.description ?? '',
       imagesUrl: initialData?.imagesUrl ?? [],
       specifications: initialData?.specifications?.length ? initialData.specifications : [emptySpecification],
@@ -64,6 +66,7 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
       price: initialData.price,
       isFree: initialData.price === 0,
       condition: initialData.condition,
+      deliveryMethods: initialData.deliveryMethods ?? { pickup: true, carrier: false },
       description: initialData.description,
       imagesUrl: initialData.imagesUrl,
       specifications: initialData.specifications.length ? initialData.specifications : [emptySpecification],
@@ -159,33 +162,6 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
           </div>
           {errors.condition && <div role="alert">{getErrorMessage(errors.condition)}</div>}
         </div>
-        <div className={styles.productDelivery}>
-          <span className={styles.productDeliveryLabel}>Условия доставки</span>
-          <div className={styles.productDeliveryOptions}>
-            <div className={styles.productDeliveryOption}>
-                <div className={styles.productDeliveryLabel}>
-                   <div className={styles.productDeliveryIconWrapper}>
-                      <PickupIcon className={styles.productDeliveryIcon} />
-                   </div>
-                   <div className={styles.productDeliveryInfo}>
-                      <div className={styles.productDeliveryTitle}>Самовывоз</div>
-                      <div className={styles.productDeliveryText}>Передача товара в указанное время и место при личной встрече</div>
-                    </div>
-                </div>
-            </div>
-            <div className={styles.productDeliveryOption}>
-                <div className={styles.productDeliveryLabel}>
-                   <div className={styles.productDeliveryIconWrapper}>
-                      <TransportIcon className={styles.productDeliveryIcon} />
-                   </div>
-                   <div className={styles.productDeliveryInfo}>
-                      <div className={styles.productDeliveryTitle}>Транспортной компанией</div>
-                      <div className={styles.productDeliveryText}>Используйте этот вариант если готовы отправить товар в другой город</div>
-                    </div>
-                </div>
-            </div>
-          </div>
-        </div>
         <div className={styles.productSpecifications}>
           <div className={styles.productSpecificationsLabel}>Спецификации товара</div>
           <div className={styles.productSpecificationsItems}>
@@ -221,6 +197,35 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
           </div>
           <div className={styles.productSpecificationsAddItems}>
             <Button type="button" onClick={() => append(emptySpecification)}>Добавить строку</Button>
+          </div>
+        </div>
+        <div className={styles.productDelivery}>
+          <span className={styles.productDeliveryLabel}>Условия доставки</span>
+          <div className={styles.productDeliveryOptions}>
+            <div className={styles.productDeliveryOption}>
+                <div className={styles.productDeliveryContent}>
+                  <div className={styles.productDeliveryIconWrapper}>
+                      <PickupIcon className={styles.productDeliveryIcon} />
+                  </div>
+                  <div className={styles.productDeliveryInfo}>
+                      <div className={styles.productDeliveryTitle}>Самовывоз</div>
+                      <div className={styles.productDeliveryText}>Передача товара в указанное время и место при личной встрече</div>
+                    </div>
+                    <Switch {...register('deliveryMethods.pickup')} className={styles.productDeliverySwitch} aria-label="Самовывоз" />
+                </div>
+            </div>
+            <div className={styles.productDeliveryOption}>
+                <div className={styles.productDeliveryContent}>
+                  <div className={styles.productDeliveryIconWrapper}>
+                      <TransportIcon className={styles.productDeliveryIcon} />
+                  </div>
+                  <div className={styles.productDeliveryInfo}>
+                      <div className={styles.productDeliveryTitle}>Транспортной компанией</div>
+                      <div className={styles.productDeliveryText}>Используйте этот вариант если готовы отправить товар в другой город</div>
+                    </div>
+                    <Switch {...register('deliveryMethods.carrier')} className={styles.productDeliverySwitch} aria-label="Транспортной компанией" />
+                </div>
+            </div>
           </div>
         </div>
         {errors.root?.serverError && <div role="alert">{getErrorMessage(errors.root.serverError)}</div>}

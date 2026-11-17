@@ -5,7 +5,13 @@ export interface ProductSpecificationRow {
   value: string;
 }
 
+export interface ProductDeliveryMethods {
+  pickup: boolean;
+  carrier: boolean;
+}
+
 export interface ProductFormData {
+  deliveryMethods: ProductDeliveryMethods;
   title: string;
   price: number;
   isFree: boolean;
@@ -15,6 +21,7 @@ export interface ProductFormData {
   specifications: ProductSpecificationRow[];
 }
 
-export interface ProductInitialData extends ProductFormData {
+export interface ProductInitialData extends Omit<ProductFormData, "deliveryMethods"> {
+  deliveryMethods?: ProductDeliveryMethods;
   id?: string;
 }

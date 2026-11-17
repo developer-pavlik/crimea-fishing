@@ -85,6 +85,12 @@
     margin-top: 10px;
 }
 
+.productDelivery {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
 .productDeliveryLabel {
     font-weight: 500;
     font-size: 14px;
@@ -101,11 +107,16 @@
     color: var(--main-text-color);
 }
 
-.productDeliveryLabel {
+.productDeliveryContent {
     display: flex;
     gap: 16px;
     padding: 16px;
     align-items: center;
+}
+
+.productDeliverySwitch {
+    margin-left: auto;
+    flex-shrink: 0;
 }
 
 .productDeliveryTitle {

@@ -20,6 +20,7 @@ export interface ProductMutationData {
   description: unknown;
   imagesUrl: unknown;
   specifications: unknown;
+  deliveryMethods?: unknown;
 }
 
 type ProductMutationResult =
@@ -78,7 +79,18 @@ function normalizeData(data: ProductMutationData) {
     normalizedSpecifications[name] = value;
   }
 
+  const delivery = data.deliveryMethods as { pickup?: unknown; carrier?: unknown } | undefined;
+  if (
+    !delivery ||
+    typeof delivery !== "object" ||
+    typeof delivery.pickup !== "boolean" ||
+    typeof delivery.carrier !== "boolean"
+  ) {
+    return null;
+  }
+
   return {
+    deliveryMethods: { pickup: delivery.pickup, carrier: delivery.carrier },
     title,
     price: price as number,
     condition: condition as ProductCondition,

@@ -32,6 +32,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
       imagesUrl: products.imagesUrl,
       description: products.description,
       specifications: products.specifications,
+      deliveryMethods: products.deliveryMethods,
     })
     .from(products)
     .where(and(eq(products.id, id), eq(products.seller, session.userId)))
@@ -63,6 +64,7 @@ export default async function EditProductPage({ params }: EditProductPageProps) 
         imagesUrl: product.imagesUrl,
         description: product.description ?? "",
         specifications,
+        deliveryMethods: product.deliveryMethods,
       }}
       onSubmit={handleSubmit}
     />
