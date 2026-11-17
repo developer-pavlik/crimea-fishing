@@ -21,6 +21,7 @@ import LocationIcon from '../../../public/icons/location.svg';
 import PickupIcon from '../../../public/icons/pickup.svg';
 import TransportIcon from '../../../public/icons/transport.svg';
 import { formatPrice } from '@/lib/formatPrice';
+import Backlink from '@/components/Backlink/Backlink';
 
 
 export interface ProductProps {
@@ -28,6 +29,7 @@ export interface ProductProps {
     title: string;
     price: number;
     condition: ProductCondition;
+    category: { name: string; slug: string | null } | null;
     imagesUrl?: string[];
     description?: string | null;
     specifications?: Record<string, string>;
@@ -44,7 +46,7 @@ export interface ProductProps {
     };
 }
 
-const Product: React.FC<ProductProps> = ({ id, title, price, condition, description, specifications, deliveryMethods, author, imagesUrl, inFavorites, isAuthenticated, isOwner, canManage }) => {
+const Product: React.FC<ProductProps> = ({ id, title, price, condition, category, description, specifications, deliveryMethods, author, imagesUrl, inFavorites, isAuthenticated, isOwner, canManage }) => {
     const router = useRouter();
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -87,6 +89,14 @@ const Product: React.FC<ProductProps> = ({ id, title, price, condition, descript
         <div className={styles.product}>
             <div className={styles.content}>
                 <div className={styles.main}>
+                    <div className={styles.topPanel}>
+                        <Backlink />
+                        {category && (
+                            <Button asLink href={`/catalog/${category.slug}`} view="secondary" className={styles.catalogButton}>
+                                {category.name}
+                            </Button>
+                        )}
+                    </div>
                     <div className={styles.titleWrapper}> 
                         <h1 className={styles.title}>{title}</h1>
                         {isAuthenticated && (

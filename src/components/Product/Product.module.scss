@@ -251,3 +251,9 @@ span.conditionLabel {
     margin: auto;
     color: var(--main-text-color);
 }
+
+.topPanel {
+    padding: 1px;
+    display: flex;
+    gap: 16px
+}

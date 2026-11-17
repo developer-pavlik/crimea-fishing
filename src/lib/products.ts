@@ -2,7 +2,7 @@ import "server-only";
 
 import { and, desc, eq, lt, or, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { favorites, products, users } from "@/db/schema";
+import { categories, favorites, products, users } from "@/db/schema";
 import type { ProductPage } from "@/types/product-catalog";
 import type { ProductCondition } from "@/types/product-form";
 
@@ -55,6 +55,7 @@ export interface ProductDetails {
     title: string;
     price: number;
     condition: ProductCondition;
+    category: { name: string; slug: string | null } | null;
     imagesUrl: string[];
     description: string | null;
     specifications: Record<string, string>;
@@ -113,6 +114,8 @@ export async function getProductById(
                 title: products.title,
                 price: products.price,
                 condition: products.condition,
+                categoryName: categories.name,
+                categorySlug: categories.slug,
                 imagesUrl: products.imagesUrl,
                 description: products.description,
                 specifications: products.specifications,
@@ -125,6 +128,7 @@ export async function getProductById(
             })
             .from(products)
             .innerJoin(users, eq(products.seller, users.id))
+            .leftJoin(categories, eq(products.categoryId, categories.id))
             .where(eq(products.id, productId))
             .limit(1);
 
@@ -137,6 +141,9 @@ export async function getProductById(
             title: row.title,
             price: row.price,
             condition: row.condition,
+            category: row.categoryName
+                ? { name: row.categoryName, slug: row.categorySlug }
+                : null,
             imagesUrl: row.imagesUrl,
             description: row.description,
             specifications: normalizeSpecifications(row.specifications),
