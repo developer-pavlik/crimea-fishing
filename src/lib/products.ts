@@ -65,6 +65,7 @@ export interface ProductDetails {
         id: string;
         name: string;
         avatarUrl: string | null;
+        city: string | null;
     };
 }
 
@@ -118,6 +119,7 @@ export async function getProductById(
                 sellerId: products.seller,
                 sellerName: users.username,
                 sellerAvatarUrl: users.photoUrl,
+                sellerCity: users.city,
             })
             .from(products)
             .innerJoin(users, eq(products.seller, users.id))
@@ -145,6 +147,7 @@ export async function getProductById(
                 id: row.sellerId,
                 name: row.sellerName ?? "Пользователь",
                 avatarUrl: row.sellerAvatarUrl,
+                city: row.sellerCity,
             },
         };
     } catch (cause) {

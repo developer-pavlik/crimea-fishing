@@ -17,6 +17,7 @@ import DeleteIcon from '../../../public/icons/delete.svg';
 import EditIcon from '../../../public/icons/edit.svg';
 import FreeIcon from '../../../public/icons/free.svg';
 import DefaultUserIcon from '../../../public/icons/fisherman.svg';
+import LocationIcon from '../../../public/icons/location.svg';
 import { formatPrice } from '@/lib/formatPrice';
 
 
@@ -36,6 +37,7 @@ export interface ProductProps {
         id: string;
         name: string;
         avatarUrl?: string | null;
+        city?: string | null;
     };
 }
 
@@ -134,6 +136,12 @@ const Product: React.FC<ProductProps> = ({ id, title, price, condition, descript
                             )}
                             <div className={styles.sellerName}>{author.name}</div>
                         </Link>
+                        {author.city?.trim() && (
+                            <div className={styles.location}>
+                                <LocationIcon className={styles.locationIcon} />
+                                <span>{author.city.trim()}</span>
+                            </div>
+                        )}
                     </div>
                     {isAuthenticated && canManage && (
                         <div className={styles.adminBox}>

@@ -122,6 +122,17 @@
     display: flex;
 }
 
+.location {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.locationIcon {
+    width: 20px;
+    height: 20px;
+}
+
 .sellerLabel {
     font-weight: 500;
     color: #6b6363;
