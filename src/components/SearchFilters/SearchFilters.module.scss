@@ -64,7 +64,8 @@
     display: grid;
 
     &_price,
-    &_condition {
+    &_condition,
+    &_delivery {
         gap: 12px;
     }
 }

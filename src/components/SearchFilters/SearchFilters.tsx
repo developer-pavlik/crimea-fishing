@@ -11,6 +11,7 @@ import {
     EMPTY_SEARCH_FILTERS,
     setSearchFilterParams,
     type SearchConditionFilter,
+    type SearchDeliveryFilter,
     type SearchFilters,
 } from '@/lib/search-filters';
 import styles from './SearchFilters.module.scss';
@@ -23,8 +24,15 @@ interface SearchFiltersForm {
     priceTo: string;
     onlyFree: boolean;
     condition: SearchConditionFilter;
+    delivery: SearchDeliveryFilter;
     onlyWithPhoto: boolean;
 }
+
+const DELIVERY_OPTIONS: { value: SearchDeliveryFilter; label: string }[] = [
+    { value: 'any', label: 'Любой' },
+    { value: 'pickup', label: 'Самовывоз' },
+    { value: 'carrier', label: 'Транспортной компанией' },
+];
 
 const CONDITION_OPTIONS: { value: SearchConditionFilter; label: string }[] = [
     { value: 'any', label: 'Любое' },
@@ -45,6 +53,7 @@ const toFormValues = (filters: SearchFilters): SearchFiltersForm => ({
     priceTo: filters.priceTo === null ? '' : String(filters.priceTo),
     onlyFree: filters.onlyFree,
     condition: filters.condition,
+    delivery: filters.delivery,
     onlyWithPhoto: filters.onlyWithPhoto,
 });
 
@@ -65,6 +74,7 @@ const toFilters = (values: SearchFiltersForm): SearchFilters | null => {
         priceTo,
         onlyFree: values.onlyFree,
         condition: values.condition,
+        delivery: values.delivery,
         onlyWithPhoto: values.onlyWithPhoto,
     };
 };
@@ -97,7 +107,7 @@ const SearchFilters = ({ filters, onChange }: SearchFiltersProps) => {
     });
 
     const values = useWatch({ control });
-    const { onlyFree, priceFrom, priceTo, condition, onlyWithPhoto } = values;
+    const { onlyFree, priceFrom, priceTo, condition, delivery, onlyWithPhoto } = values;
     const priceError = errors.priceFrom?.message ?? errors.priceTo?.message;
     const propKey = serialize(filters);
     const lastSent = useRef(filters);
@@ -122,6 +132,7 @@ const SearchFilters = ({ filters, onChange }: SearchFiltersProps) => {
             priceTo: priceTo ?? '',
             onlyFree: onlyFree ?? false,
             condition: condition ?? 'any',
+            delivery: delivery ?? 'any',
             onlyWithPhoto: onlyWithPhoto ?? false,
         });
         if (!next) return;
@@ -140,7 +151,7 @@ const SearchFilters = ({ filters, onChange }: SearchFiltersProps) => {
         );
 
         return () => clearTimeout(timer);
-    }, [priceFrom, priceTo, onlyFree, condition, onlyWithPhoto]);
+    }, [priceFrom, priceTo, onlyFree, condition, delivery, onlyWithPhoto]);
 
     const handleReset = () => {
         reset(toFormValues(EMPTY_SEARCH_FILTERS));
@@ -154,6 +165,7 @@ const SearchFilters = ({ filters, onChange }: SearchFiltersProps) => {
         !!priceTo ||
         !!onlyFree ||
         condition !== 'any' ||
+        delivery !== 'any' ||
         !!onlyWithPhoto;
 
     const validateRange = () => {
@@ -232,6 +244,19 @@ const SearchFilters = ({ filters, onChange }: SearchFiltersProps) => {
                                 label={option.label}
                                 value={option.value}
                                 {...register('condition')}
+                            />
+                        ))}
+                    </div>
+                </div>
+                <div className={styles.searchFiltersSection}>
+                    <div className={styles.searchFiltersLabel}>Способ доставки</div>
+                    <div className={cn(styles.searchFiltersItem, styles.searchFiltersItem_delivery)}>
+                        {DELIVERY_OPTIONS.map((option) => (
+                            <Radio
+                                key={option.value}
+                                label={option.label}
+                                value={option.value}
+                                {...register('delivery')}
                             />
                         ))}
                     </div>

@@ -61,6 +61,9 @@ export function buildProductFiltersCondition(
         filters.condition !== "any"
             ? eq(products.condition, filters.condition)
             : undefined,
+        filters.delivery !== "any"
+            ? sql`(${products.deliveryMethods} ->> ${filters.delivery})::boolean`
+            : undefined,
         filters.onlyWithPhoto
             ? sql`cardinality(${products.imagesUrl}) > 0`
             : undefined,

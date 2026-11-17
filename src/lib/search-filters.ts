@@ -1,10 +1,13 @@
 export type SearchConditionFilter = "any" | "new" | "used";
 
+export type SearchDeliveryFilter = "any" | "pickup" | "carrier";
+
 export interface SearchFilters {
     priceFrom: number | null;
     priceTo: number | null;
     onlyFree: boolean;
     condition: SearchConditionFilter;
+    delivery: SearchDeliveryFilter;
     onlyWithPhoto: boolean;
 }
 
@@ -13,6 +16,7 @@ export const EMPTY_SEARCH_FILTERS: SearchFilters = {
     priceTo: null,
     onlyFree: false,
     condition: "any",
+    delivery: "any",
     onlyWithPhoto: false,
 };
 
@@ -47,12 +51,15 @@ export function parseSearchFilters(
     }
 
     const condition = first(get("condition"));
+    const delivery = first(get("delivery"));
 
     return {
         priceFrom,
         priceTo,
         onlyFree,
         condition: condition === "new" || condition === "used" ? condition : "any",
+        delivery:
+            delivery === "pickup" || delivery === "carrier" ? delivery : "any",
         onlyWithPhoto: first(get("photo")) === "1",
     };
 }
@@ -72,6 +79,7 @@ export function setSearchFilterParams(
         }
     }
     if (filters.condition !== "any") params.set("condition", filters.condition);
+    if (filters.delivery !== "any") params.set("delivery", filters.delivery);
     if (filters.onlyWithPhoto) params.set("photo", "1");
 }
 
@@ -81,6 +89,7 @@ export function hasActiveSearchFilters(filters: SearchFilters) {
         filters.priceTo !== null ||
         filters.onlyFree ||
         filters.condition !== "any" ||
+        filters.delivery !== "any" ||
         filters.onlyWithPhoto
     );
 }
