@@ -58,6 +58,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             imagesUrl={product.imagesUrl}
             description={product.description}
             specifications={product.specifications}
+            deliveryMethods={product.deliveryMethods}
             inFavorites={product.isFavorite}
             isAuthenticated={Boolean(session)}
             isOwner={product.isOwner}

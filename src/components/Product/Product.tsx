@@ -18,6 +18,8 @@ import EditIcon from '../../../public/icons/edit.svg';
 import FreeIcon from '../../../public/icons/free.svg';
 import DefaultUserIcon from '../../../public/icons/fisherman.svg';
 import LocationIcon from '../../../public/icons/location.svg';
+import PickupIcon from '../../../public/icons/pickup.svg';
+import TransportIcon from '../../../public/icons/transport.svg';
 import { formatPrice } from '@/lib/formatPrice';
 
 
@@ -29,6 +31,7 @@ export interface ProductProps {
     imagesUrl?: string[];
     description?: string | null;
     specifications?: Record<string, string>;
+    deliveryMethods: { pickup: boolean; carrier: boolean };
     inFavorites: boolean;
     isAuthenticated: boolean;
     isOwner: boolean;
@@ -41,7 +44,7 @@ export interface ProductProps {
     };
 }
 
-const Product: React.FC<ProductProps> = ({ id, title, price, condition, description, specifications, author, imagesUrl, inFavorites, isAuthenticated, isOwner, canManage }) => {
+const Product: React.FC<ProductProps> = ({ id, title, price, condition, description, specifications, deliveryMethods, author, imagesUrl, inFavorites, isAuthenticated, isOwner, canManage }) => {
     const router = useRouter();
     const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -141,6 +144,31 @@ const Product: React.FC<ProductProps> = ({ id, title, price, condition, descript
                                 <LocationIcon className={styles.locationIcon} />
                                 <span>{author.city.trim()}</span>
                             </div>
+                        )}
+                    </div>
+                    <div className={styles.delivery}>
+                        <div className={styles.deliveryLabel}>Способ получения</div>
+                        {deliveryMethods.pickup || deliveryMethods.carrier ? (
+                            <ul className={styles.deliveryList}>
+                                {deliveryMethods.pickup && (
+                                    <li className={styles.deliveryItem}>
+                                        <span className={styles.deliveryIconWrapper}>
+                                            <PickupIcon className={styles.deliveryIcon} />
+                                        </span>
+                                        <span className={styles.deliveryTitle}>Самовывоз</span>
+                                    </li>
+                                )}
+                                {deliveryMethods.carrier && (
+                                    <li className={styles.deliveryItem}>
+                                        <span className={styles.deliveryIconWrapper}>
+                                            <TransportIcon className={styles.deliveryIcon} />
+                                        </span>
+                                        <span className={styles.deliveryTitle}>Транспортной компанией</span>
+                                    </li>
+                                )}
+                            </ul>
+                        ) : (
+                            <p className={styles.deliveryEmpty}>Информацию о доставке уточняйте у продавца</p>
                         )}
                     </div>
                     {isAuthenticated && canManage && (

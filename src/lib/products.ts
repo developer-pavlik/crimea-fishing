@@ -58,6 +58,7 @@ export interface ProductDetails {
     imagesUrl: string[];
     description: string | null;
     specifications: Record<string, string>;
+    deliveryMethods: { pickup: boolean; carrier: boolean };
     isFavorite: boolean;
     isOwner: boolean;
     canManage: boolean;
@@ -115,6 +116,7 @@ export async function getProductById(
                 imagesUrl: products.imagesUrl,
                 description: products.description,
                 specifications: products.specifications,
+                deliveryMethods: products.deliveryMethods,
                 isFavorite: favoriteExpression,
                 sellerId: products.seller,
                 sellerName: users.username,
@@ -138,6 +140,10 @@ export async function getProductById(
             imagesUrl: row.imagesUrl,
             description: row.description,
             specifications: normalizeSpecifications(row.specifications),
+            deliveryMethods: {
+                pickup: row.deliveryMethods?.pickup === true,
+                carrier: row.deliveryMethods?.carrier === true,
+            },
             isFavorite: row.isFavorite,
             isOwner: userId === row.sellerId,
             canManage:

@@ -145,6 +145,71 @@
     align-self: start;
 }
 
+.delivery {
+    margin-top: 24px;
+    border-radius: 18px;
+    background: #f5f5f7;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.deliveryLabel {
+    font-weight: 500;
+    color: #6b6363;
+    font-size: 14px
+}
+
+.deliveryList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.deliveryItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.deliveryIconWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #f5f5f7;
+}
+
+.deliveryIcon {
+    width: 28px;
+    height: auto;
+    color: var(--main-text-color);
+}
+
+.deliveryTitle {
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: #1d1d1f;
+}
+
+.deliveryEmpty {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #6e6e73;
+}
+
 .adminBox {
     margin-top: 32px;
     display: flex;
