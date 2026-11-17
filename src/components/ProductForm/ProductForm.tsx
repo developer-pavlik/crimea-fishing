@@ -10,6 +10,8 @@ import ImgLoader from '../ImgLoader/ImgLoader';
 import Checkbox from '../ui/Checkbox/Checkbox';
 import Radio from '../ui/Radio/Radio';
 import DeleteIcon from '../../../public/icons/delete.svg';
+import PickupIcon from '../../../public/icons/pickup.svg';
+import TransportIcon from '../../../public/icons/transport.svg';
 import type { ProductFormData, ProductInitialData } from '@/types/product-form';
 
 const emptySpecification = { name: '', value: '' };
@@ -156,6 +158,33 @@ export default function ProductForm({ initialData, onSubmit = async () => {} }: 
             <Radio {...register('condition', { required: 'Выберите состояние товара' })} value='used' label='Б/У' />
           </div>
           {errors.condition && <div role="alert">{getErrorMessage(errors.condition)}</div>}
+        </div>
+        <div className={styles.productDelivery}>
+          <span className={styles.productDeliveryLabel}>Условия доставки</span>
+          <div className={styles.productDeliveryOptions}>
+            <div className={styles.productDeliveryOption}>
+                <div className={styles.productDeliveryLabel}>
+                   <div className={styles.productDeliveryIconWrapper}>
+                      <PickupIcon className={styles.productDeliveryIcon} />
+                   </div>
+                   <div className={styles.productDeliveryInfo}>
+                      <div className={styles.productDeliveryTitle}>Самовывоз</div>
+                      <div className={styles.productDeliveryText}>Передача товара в указанное время и место при личной встрече</div>
+                    </div>
+                </div>
+            </div>
+            <div className={styles.productDeliveryOption}>
+                <div className={styles.productDeliveryLabel}>
+                   <div className={styles.productDeliveryIconWrapper}>
+                      <TransportIcon className={styles.productDeliveryIcon} />
+                   </div>
+                   <div className={styles.productDeliveryInfo}>
+                      <div className={styles.productDeliveryTitle}>Транспортной компанией</div>
+                      <div className={styles.productDeliveryText}>Используйте этот вариант если готовы отправить товар в другой город</div>
+                    </div>
+                </div>
+            </div>
+          </div>
         </div>
         <div className={styles.productSpecifications}>
           <div className={styles.productSpecificationsLabel}>Спецификации товара</div>

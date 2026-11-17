@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 556 509" fill="none" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
+	<defs>
+		<g id="man">
+			<path d="M60 170V120a45 45 0 0 1 90 0v50a45 45 0 0 1-90 0Z"/>
+			<path d="M60 145H190"/>
+			<path d="M85 240Q38 265 38 310V440"/>
+			<path d="M140 235Q165 270 160 350V440"/>
+			<path d="M105 350H215a20 20 0 0 1 0 40H115"/>
+		</g>
+	</defs>
+	<use href="#man"/>
+	<use href="#man" transform="translate(556 0) scale(-1 1)"/>
+	<rect x="200" y="215" width="156" height="130" rx="4"/>
+	<path d="M250 215v-20a28 28 0 0 1 56 0v20"/>
+	<circle cx="292" cy="250" r="7"/>
+	<path d="M292 257V295A22 22 0 0 1 248 295V282M248 282L258 292"/>
+</svg>

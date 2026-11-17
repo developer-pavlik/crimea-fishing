@@ -84,3 +84,45 @@
     align-self: start;
     margin-top: 10px;
 }
+
+.productDeliveryLabel {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.productDeliveryOptions {
+    border: 1px solid #ccc;
+    border-radius: 16px;
+}
+
+.productDeliveryIcon {
+    width: 56px;
+    height: auto;
+    color: var(--main-text-color);
+}
+
+.productDeliveryLabel {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    align-items: center;
+}
+
+.productDeliveryTitle {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.productDeliveryText {
+    font-size: 14px;
+    color: #5a5a5a;
+    margin-top : 4px;
+}
+
+.productDeliveryOption {
+    border-bottom: 1px solid #ccc;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
