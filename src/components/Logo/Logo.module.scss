@@ -1,0 +1,34 @@
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #16364a;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logoImg {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.title {
+    font-size: 20px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.subtitle {
+    margin-top: 6px;
+    color: #31a5d9;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+}

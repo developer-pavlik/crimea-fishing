@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { eq } from 'drizzle-orm';
-import logo from '../../../public/logo.png';
 import UserIcon from '../../../public/icons/user.svg';
 import { db } from '@/db';
 import { users } from '@/db/schema';
@@ -9,6 +8,7 @@ import { getAccessSession } from '@/lib/auth';
 import styles from './Header.module.scss';
 import Search from '../Search/Search';
 import ProductCategoriesMenu from '../ProductCategoriesMenu/ProductCategoriesMenu';
+import Logo from '../Logo/Logo';
 
 const Header = async () => {
     const session = await getAccessSession();
@@ -25,14 +25,7 @@ const Header = async () => {
         <header className={styles.header}>
             <div className='container'>
                 <div className={styles.inner}>
-                    <Link className={styles.logo} href="/">
-                        <Image
-                            src={logo}
-                            alt="Крымская рыбалка"
-                            className={styles.logoImg}
-                            priority
-                        />
-                    </Link>
+                    <Logo />
                     <ProductCategoriesMenu />
                     <Search />
                     {session && (
