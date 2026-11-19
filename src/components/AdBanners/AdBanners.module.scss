@@ -1,0 +1,29 @@
+.adBanners {
+    display: grid;
+    grid-template-columns: 70% auto;
+    gap: 12px;
+    width: 100%;
+    position: relative;
+    z-index: 3;
+}
+
+.featuredBanner,
+.secondaryBanner {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    border-radius: 24px;
+    color: #fff;
+    overflow: hidden;
+}
+
+.featuredBanner {
+    aspect-ratio: 2.33;
+    background: #EEF2F5;
+}
+
+
+.secondaryBanner {
+    min-height: 100%;
+    background: #EEF2F5;
+}

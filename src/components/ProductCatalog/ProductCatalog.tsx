@@ -4,6 +4,7 @@ import ProductPanel from "@/components/ProductPanel/ProductPanel";
 import type { ProductCategory } from "@/lib/products";
 import type { ProductPage } from "@/types/product-catalog";
 import { getAccessSession } from "@/lib/auth";
+import AdBanners from "../AdBanners/AdBanners";
 
 interface ProductCatalogProps {
     initialPage: ProductPage;
@@ -18,6 +19,7 @@ export default async function ProductCatalog(props: ProductCatalogProps) {
 
     return (
         <div className={styles.mainPage}>
+            <AdBanners />
             <ProductPanel />
             <InfiniteProductGrid
                 key={`${productsUrl}:${session?.userId ?? "guest"}`}
