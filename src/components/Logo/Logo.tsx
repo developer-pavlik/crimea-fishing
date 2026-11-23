@@ -3,8 +3,16 @@ import Link from 'next/link';
 import logo from '../../../public/logo.png';
 import styles from './Logo.module.scss';
 
-const Logo = () => (
-    <Link className={styles.logo} href="/" aria-label="Fishing Market — главная">
+type LogoProps = {
+    isAdmin?: boolean;
+};
+
+const Logo = ({ isAdmin = false }: LogoProps) => (
+    <Link
+        className={styles.logo}
+        href={isAdmin ? '/adminka' : '/'}
+        aria-label={isAdmin ? 'Админ-панель — на главную' : 'Fishing Market — главная'}
+    >
         <Image
             src={logo}
             alt=""
@@ -15,7 +23,9 @@ const Logo = () => (
         />
         <span className={styles.text}>
             <span className={styles.title}>Fishing Market</span>
-            <span className={styles.subtitle}>Все для рыбалки</span>
+            <span className={styles.subtitle}>
+                {isAdmin ? 'Админ панель' : 'Все для рыбалки'}
+            </span>
         </span>
     </Link>
 );

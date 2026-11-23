@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { eq } from 'drizzle-orm';
 import UserIcon from '../../../public/icons/user.svg';
+import GearIcon from '../../../public/icons/gear.svg';
 import { db } from '@/db';
 import { users } from '@/db/schema';
 import { getAccessSession } from '@/lib/auth';
@@ -14,12 +15,13 @@ const Header = async () => {
     const session = await getAccessSession();
     const [user] = session
         ? await db
-            .select({ photoUrl: users.photoUrl })
+            .select({ photoUrl: users.photoUrl, role: users.role })
             .from(users)
             .where(eq(users.id, session.userId))
             .limit(1)
         : [];
     const avatarUrl = user?.photoUrl?.trim();
+    const isAdmin = !!user?.role && ['moderator', 'admin', 'superadmin'].includes(user.role);
 
     return (
         <header className={styles.header}>
@@ -43,7 +45,12 @@ const Header = async () => {
                                 <UserIcon className={styles.userIcon} />
                             )}
                         </Link>
-                    )}                    
+                    )}
+                    {session && isAdmin && (
+                        <Link className={styles.adminLink} href="/adminka">
+                            <GearIcon className={styles.adminIcon} />
+                        </Link>
+                    )}
                 </div>
             </div>
         </header>

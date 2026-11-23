@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import "../styles/fonts.scss";
 import "../styles/globals.scss";
 import "../styles/normalize.scss";
-import Header from "@/components/Header/Header";
-import Footer from "@/components/Footer/Footer";
 
 export const metadata: Metadata = {
     title: "Рыбацкая барахолка",
@@ -14,13 +12,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     return (
         <html lang="ru">
             <body>
-                <Header />
-                <main className="main">
-                    <div className="container">
-                        {children}
-                    </div>
-                </main>
-                <Footer />
+                {children}
             </body>
         </html>
     );
